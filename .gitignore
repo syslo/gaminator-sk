@@ -1,0 +1,8 @@
+# Python binaries
+__pycache__
+**.pyc
+**.pyo
+
+# Editor files
+.idea
+**~
