@@ -9,7 +9,7 @@ __author__ = "KSP"
 
 from collections import defaultdict
 import pygame
-
+import color
 
 ##############
 ### EVENTS ###
@@ -94,6 +94,8 @@ def _register_emitter_to_function(f, emitter, *keys, **kw_keys):
 ########################
 ### Public interface ###
 ########################
+
+Farba = color.Farba()
 
 CIERNA   = (   0,   0,   0)
 BIELA    = ( 255, 255, 255)

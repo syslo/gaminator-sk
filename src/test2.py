@@ -33,7 +33,7 @@ class Prepinac(Model):
         self.miesto_vlavo = 10
         self.x = 200
         self.y = 200
-        self.farba = CERVENA
+        self.farba = Farba.CERVENA
 
     def nakresli_sa(self, kreslic, obrazovka):
         kreslic.rect(obrazovka, self.farba, [self.x-10, self.y-10, 21, 21])
@@ -49,28 +49,28 @@ class Prepinac(Model):
 
     @spusti_ked_nastane("cervena")
     def bud_cerveny(self):
-        self.farba = CERVENA
+        self.farba = Farba.CERVENA
 
     @spusti_ked_nastane("modra")
     def bud_modry(self):
-        self.farba = MODRA
+        self.farba = Farba.MODRA
 
 
 
 class Hra(Svet):
 
-     def nastav_sa(self):
-         self.novy_model(Hrac)
+    def nastav_sa(self):
+        self.novy_model(Hrac)
 
-         p1 = self.novy_model(Prepinac)
-         p1.x += 50
-         p2 = self.novy_model(Prepinac)
-         p2.x -= 50
-         p3 = self.novy_model(Prepinac)
-         p3.y -= 50
-         p4 = self.novy_model(Prepinac)
-         p4.y += 50
-
+        p1 = self.novy_model(Prepinac)
+        p1.x += 50
+        p2 = self.novy_model(Prepinac)
+        p2.x -= 50
+        p3 = self.novy_model(Prepinac)
+        p3.y -= 50
+        p4 = self.novy_model(Prepinac)
+        p4.y += 50
 
 spusti(Hra)
+
 
