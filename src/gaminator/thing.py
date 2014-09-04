@@ -40,17 +40,17 @@ class Vec(object):
 
     def prekryva(self, vec):
         return (
-            self.y + self.miesto_vpravo >
-            vec.y - vec.miesto_vlavo
+            self.x + self.miesto_vpravo >
+            vec.x - vec.miesto_vlavo
             and
-            vec.y + vec.miesto_vpravo >
-            self.y - self.miesto_vlavo
+            vec.x + vec.miesto_vpravo >
+            self.x - self.miesto_vlavo
             and
-            self.x + self.miesto_dole >
-            vec.x - vec.miesto_hore
+            self.y + self.miesto_dole >
+            vec.y - vec.miesto_hore
             and
-            vec.x + vec.miesto_dole >
-            self.x - self.miesto_hore
+            vec.y + vec.miesto_dole >
+            self.y - self.miesto_hore
         )
 
     def znic(self):
