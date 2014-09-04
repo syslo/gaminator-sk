@@ -38,9 +38,6 @@ class Svet(object):
     def krok(self):
         pass
 
-    def cas(self):
-        return pygame.time.get_ticks()
-
     def nastalaUdalost(self, udalost, *args, **kwargs):
         self.nacasujUdalost(0, udalost, *args, **kwargs)
 
