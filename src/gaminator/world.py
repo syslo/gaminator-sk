@@ -14,7 +14,7 @@ class Svet(object):
 
     __metaclass__ = EventAwareType
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self._things_by_class = defaultdict(set)
         self._things = set()
         self._things_sorted = []
@@ -26,7 +26,7 @@ class Svet(object):
                           "name": NamedEventEmitter()}
         self.cas = 0
         self.stlacene = None
-        self.nastav()
+        self.nastav(*args, **kwargs)
 
     def _activate(self):
         self._zero_time = pygame.time.get_ticks() - self._actual_time

@@ -7,7 +7,7 @@ class Vec(object):
 
     __metaclass__ = EventAwareType
 
-    def __init__(self, svet):
+    def __init__(self, svet, *args, **kwargs):
         self._world = svet
         self.miesto_hore = 0
         self.miesto_dole = 0
@@ -16,7 +16,7 @@ class Vec(object):
         self.x = 0
         self.y = 0
         self._z = 0
-        self.nastav()
+        self.nastav(*args, **kwargs)
         svet._register_thing(self)
 
     @property
