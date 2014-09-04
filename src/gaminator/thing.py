@@ -32,7 +32,7 @@ class Vec(object):
     def nastav(self):
         pass
 
-    def nakresli(self, platno, obrazovka):
+    def nakresli(self, kreslic):
         pass
 
     def krok(self):
