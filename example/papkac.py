@@ -21,6 +21,7 @@ class Papkac(Vec):
         self.y = VYSKA/2
 
     def nakresli(self, kreslic):
+        kreslic.farba = Farba.ZLTA
         kreslic.elipsa((-20, -20), 41, 41)
         kreslic.farba = Farba.BIELA
         kreslic.elipsa((-15, -15), 15, 15)
@@ -37,6 +38,22 @@ class Papkac(Vec):
             self.x += 5
         if self.svet.stlacene[pygame.K_LEFT]:
             self.x -= 5
+
+    def vyvoj(self):
+        novy = Superpapkac(self.svet)
+        novy.x = self.x
+        novy.y = self.y
+        novy.body = self.body
+        novy.zivoty = self.zivoty + 1
+        self.svet.papkac = novy
+        self.znic()
+
+
+class Superpapkac(Obrazok, Papkac):
+
+    def nastav(self):
+        self.nastavSubor("superpapkac.png")
+
 
 class Jedlo(Vec):
 
@@ -64,6 +81,8 @@ class Jedlo(Vec):
     def zjedene(self, papkac):
         if self.dobre:
             papkac.body += 1
+            if papkac.body % 20 == 0:
+                papkac.vyvoj()
         else:
             papkac.zivoty -= 1
             if papkac.zivoty == 0:
@@ -81,6 +100,21 @@ class Jedlo(Vec):
 class Hra(Svet):
 
     def nastav(self):
+
+        self.body = Text(self)
+        self.body.zarovanajX = 1.0  # zarovnaj vlavo
+        self.body.zarovanajY = 0.0  # zarovnaj hore
+        self.body.x = SIRKA - 5
+        self.body.y = 5
+        self.body.aktualizuj(velkost=50)
+
+        self.zivoty = Text(self)
+        self.zivoty.zarovanajX = 0.0  # zarovnaj vpravo
+        self.zivoty.zarovanajY = 0.0  # zarovnaj hore
+        self.zivoty.x = 5
+        self.zivoty.y = 5
+        self.zivoty.aktualizuj(velkost=50)
+
         self.papkac = Papkac(self)
         for i in range(5):
             self.nacasujUdalost(1000*i, "Vytvor dobre jedlo")
@@ -88,8 +122,9 @@ class Hra(Svet):
             self.nacasujUdalost(1000*i, "Vytvor zle jedlo")
 
     def krok(self):
-        okno.nazov =\
-            "Body: "+str(self.papkac.body)+", Zivoty: "+str(self.papkac.zivoty)
+
+        self.body.aktualizuj(text=str(self.papkac.body)+" b")
+        self.zivoty.aktualizuj(text="zivoty: "+str(self.papkac.zivoty))
 
         if self.stlacene[pygame.K_f]:
             okno.celaObrazovka()
@@ -113,12 +148,8 @@ class Hra(Svet):
         jedlo.farba = Farba.CERVENA
         jedlo.dobre = False
 
-
-
-
-
+okno.nazov = "Papkac"
 okno.sirka = SIRKA
 okno.vyska = VYSKA
 hra.fps = 60
 hra.start(Hra())
-
