@@ -6,7 +6,7 @@ import heapq
 import pygame
 
 from .event import EventAwareType
-from .event import global_collision_emitter, global_named_emitter
+from .event import CollisionEventEmitter, NamedEventEmitter
 
 from .drawer import Kreslic
 
@@ -22,6 +22,8 @@ class Svet(object):
         self._events = []
         self._actual_time = 0
         self._zero_time = 0
+        self._emitters = {"coll": CollisionEventEmitter(),
+                          "name": NamedEventEmitter()}
         self.cas = 0
         self.stlacene = None
         self.nastav()
@@ -31,6 +33,10 @@ class Svet(object):
 
     def _deactivate(self):
         self._actual_time = pygame.time.get_ticks() - self._zero_time
+
+    @property
+    def svet(self):
+        return self
 
     def nastav(self):
         pass
@@ -71,7 +77,7 @@ class Svet(object):
         while self._events and self._events[0][0] <= self._actual_time:
             events.append(heapq.heappop(self._events))
         for _, event, args, kwargs in events:
-            global_named_emitter.emit(event, *args, **kwargs)
+            self._emitters["name"].emit(event, *args, **kwargs)
 
         # Do steps
 
@@ -82,13 +88,13 @@ class Svet(object):
         # Handle collisions
         collisions = []
         for thing1 in self._things:
-            for cls2 in global_collision_emitter.classes_for(thing1):
+            for cls2 in self._emitters["coll"].classes_for(thing1):
                 if cls2 in self._things_by_class:
                     for thing2 in self._things_by_class[cls2]:
                         if thing1.prekryva(thing2):
                             collisions.append((thing1, cls2, thing2))
         for thing1, cls2, thing2 in collisions:
-            global_collision_emitter.emit(thing1, cls2, thing2)
+            self._emitters["coll"].emit(thing1, cls2, thing2)
 
         # Repaint
         if self._resort_things:

@@ -9,7 +9,6 @@ class Vec(object):
 
     def __init__(self, svet):
         self._world = svet
-        self.svet = svet
         self.miesto_hore = 0
         self.miesto_dole = 0
         self.miesto_vpravo = 0
@@ -19,6 +18,10 @@ class Vec(object):
         self._z = 0
         self.nastav()
         svet._register_thing(self)
+
+    @property
+    def svet(self):
+        return self._world
 
     @property
     def z(self):

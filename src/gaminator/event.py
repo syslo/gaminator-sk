@@ -1,6 +1,7 @@
-#  -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from collections import defaultdict
+
 
 
 class EventRegistration(object):
@@ -18,7 +19,6 @@ class EventRegistration(object):
 
 
 class _MultiDeregistrator(object):
-
     def __init__(self, deregistrators=None):
         if not deregistrators:
             deregistrators = []
@@ -33,7 +33,6 @@ class _MultiDeregistrator(object):
 
 
 class EventEmitter(object):
-
     def __init__(self):
         self.listeners = set()
 
@@ -50,7 +49,6 @@ class EventEmitter(object):
 
 
 class NamedEventEmitter(object):
-
     def __init__(self):
         self.emitters = defaultdict(EventEmitter)
 
@@ -60,11 +58,11 @@ class NamedEventEmitter(object):
     def emit(self, name, *args, **kw_args):
         self.emitters[name].emit(*args, **kw_args)
 
+
 global_named_emitter = NamedEventEmitter()
 
 
 class CollisionEventEmitter(object):
-
     def __init__(self):
         self.emitters = defaultdict(lambda: defaultdict(EventEmitter))
 
@@ -81,14 +79,14 @@ class CollisionEventEmitter(object):
     def emit(self, obj1, cls, obj2):
         self.emitters[obj1][cls].emit(obj2)
 
+
 global_collision_emitter = CollisionEventEmitter()
 
 
 class EventAwareType(type):
-
     def __init__(cls, name, bases, dct):
         super(EventAwareType, cls).__init__(name, bases, dct)
-        cls._listening_to = defaultdict(list)
+        cls._listening_to = []
         for k in dct:
             cls._new_attribute(k, dct[k])
 
@@ -97,43 +95,43 @@ class EventAwareType(type):
         return super(EventAwareType, cls).__setattr__(key, value)
 
     def _new_attribute(cls, key, value):
-        if hasattr(value, '__call__') and hasattr(value, 'hooked_emitters'):
-            for emitter, keys, kw_keys in value.hooked_emitters:
-                cls._listening_to[emitter].append((key, keys, kw_keys))
-            del value.hooked_emitters
+        if hasattr(value, '__call__') and hasattr(value, '_hooked_emitters'):
+            for ename, keys, kw_keys in value._hooked_emitters:
+                cls._listening_to.append((ename, key, keys, kw_keys))
+            del value._hooked_emitters
 
     def __call__(cls, *args, **kw_args):
         instance = super(EventAwareType, cls).__call__(*args, **kw_args)
         instance._emitter_registrations = []
         for super_cls in cls.mro():
             if isinstance(super_cls, EventAwareType):
-                super_cls._create_emitter_registrations(
-                    instance, instance._emitter_registrations)
+                super_cls._add_emitter_registrations(instance)
         return instance
 
-    def _create_emitter_registrations(cls, instance, res):
-        for emitter in cls._listening_to:
-            for fname, keys, kw_keys in cls._listening_to[emitter]:
-                res.append(
-                    EventRegistration(emitter, instance, fname, keys, kw_keys))
+    def _add_emitter_registrations(cls, instance):
+        for ename, fname, keys, kw_keys in cls._listening_to:
+            instance._emitter_registrations.append(
+                EventRegistration(instance.svet._emitters[ename],
+                                  instance, fname, keys, kw_keys))
 
 
-def _register_emitter_to_function(f, emitter, *keys, **kw_keys):
-    if hasattr(f, 'hooked_emitters'):
-        f.hooked_emitters.append((emitter, keys, kw_keys))
-    else:
-        f.hooked_emitters = [(emitter, keys, kw_keys)]
+def _register_emitter_to_function(f, ename, *keys, **kw_keys):
+    if not hasattr(f, 'hooked_emitters'):
+        f._hooked_emitters = []
+    f._hooked_emitters.append((ename, keys, kw_keys))
 
 
 def priUdalosti(udalost):
     def decorator(f):
-        _register_emitter_to_function(f, global_named_emitter, udalost)
+        _register_emitter_to_function(f, "name", udalost)
         return f
+
     return decorator
 
 
 def priZrazke(*modely):
     def decorator(f):
-        _register_emitter_to_function(f, global_collision_emitter, *modely)
+        _register_emitter_to_function(f, "coll", *modely)
         return f
+
     return decorator
