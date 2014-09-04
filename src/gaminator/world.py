@@ -44,6 +44,10 @@ class Svet(object):
     def krok(self):
         pass
 
+    def znicVsetko(self):
+        for thing in list(self._things):
+            thing.znic()
+
     def nastalaUdalost(self, udalost, *args, **kwargs):
         self.nacasujUdalost(0, udalost, *args, **kwargs)
 

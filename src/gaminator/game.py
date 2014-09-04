@@ -22,8 +22,7 @@ class _Game:
         self._world_changes.append((1, svet))
 
     def nahradSvet(self, svet):
-        self._world_changes.append((-1, None))
-        self._world_changes.append((1, svet))
+        self._world_changes.append((0, svet))
 
     def zatvorSvet(self):
         self._world_changes.append((-1, None))
@@ -67,9 +66,9 @@ class _Game:
         for action, world in self._world_changes:
             if self._worlds:
                 self._worlds[-1]._deactivate()
-            if action == -1 and self._worlds:
-                self._worlds.pop()
-            if action == 1:
+            if action in [-1, 0] and self._worlds:
+                self._worlds.pop().znicVsetko()
+            if action in [0, 1]:
                 self._worlds.append(world)
             if self._worlds:
                 self._worlds[-1]._activate()
