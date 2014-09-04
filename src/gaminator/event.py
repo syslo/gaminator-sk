@@ -68,8 +68,8 @@ class CollisionEventEmitter(object):
     def __init__(self):
         self.emitters = defaultdict(lambda: defaultdict(EventEmitter))
 
-    def class_list_for(self, instance):
-        return list(self.emitters[instance].keys())
+    def classes_for(self, instance):
+        return self.emitters[instance].keys()
 
     def register(self, registration, *classes):
         deregistrator = _MultiDeregistrator()

@@ -81,10 +81,9 @@ class Svet(object):
 
         # Handle collisions
         collisions = []
-        for cls1 in self._things_by_class:
-            for thing1 in self._things_by_class[cls1]:
-                classes = global_collision_emitter.class_list_for(thing1)
-                for cls2 in classes:
+        for thing1 in self._things:
+            for cls2 in global_collision_emitter.classes_for(thing1):
+                if cls2 in self._things_by_class:
                     for thing2 in self._things_by_class[cls2]:
                         if thing1.prekryva(thing2):
                             collisions.append((thing1, cls2, thing2))
