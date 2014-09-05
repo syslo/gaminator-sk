@@ -42,19 +42,27 @@ class _Game:
         while not self._end:
 
             self._handle_world_changes()
-
             okno.aplikuj()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.koniec()
-                if event.type == pygame.VIDEORESIZE:
-                    okno._height = event.h
-                    okno._width = event.w
-
-            self._screen.fill(Farba.BIELA)
 
             if not self._worlds:
                 break
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.koniec()
+                elif event.type == pygame.VIDEORESIZE:
+                    okno._height = event.h
+                    okno._width = event.w
+                elif event.type == pygame.KEYDOWN:
+                    self._worlds[-1].nastalaUdalost(
+                        "KLAVES DOLE", event.key, event.unicode)
+                elif event.type == pygame.KEYUP:
+                    self._worlds[-1].nastalaUdalost(
+                        "KLAVES HORE", event.key)
+
+            self._screen.fill(Farba.BIELA)
+
+
             self._worlds[-1]._tick()
 
             pygame.display.flip()

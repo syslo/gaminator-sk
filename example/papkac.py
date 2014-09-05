@@ -102,15 +102,15 @@ class Hra(Svet):
     def nastav(self):
 
         self.body = Text(self)
-        self.body.zarovanajX = 1.0  # zarovnaj vlavo
-        self.body.zarovanajY = 0.0  # zarovnaj hore
+        self.body.zarovnajX = 1.0  # zarovnaj vlavo
+        self.body.zarovnajY = 0.0  # zarovnaj hore
         self.body.x = SIRKA - 5
         self.body.y = 5
         self.body.aktualizuj(velkost=50)
 
         self.zivoty = Text(self)
-        self.zivoty.zarovanajX = 0.0  # zarovnaj vpravo
-        self.zivoty.zarovanajY = 0.0  # zarovnaj hore
+        self.zivoty.zarovnajX = 0.0  # zarovnaj vpravo
+        self.zivoty.zarovnajY = 0.0  # zarovnaj hore
         self.zivoty.x = 5
         self.zivoty.y = 5
         self.zivoty.aktualizuj(velkost=50)
@@ -122,17 +122,18 @@ class Hra(Svet):
             self.nacasujUdalost(1000*i, "Vytvor zle jedlo")
 
     def krok(self):
-
         self.body.aktualizuj(text=str(self.papkac.body)+" b")
         self.zivoty.aktualizuj(text="zivoty: "+str(self.papkac.zivoty))
 
-        if self.stlacene[pygame.K_f]:
+    @priUdalosti("KLAVES DOLE")
+    def klaves(self, klaves, unicode):
+        if klaves == pygame.K_f:
             okno.celaObrazovka()
-        if self.stlacene[pygame.K_g]:
+        if klaves == pygame.K_g:
             okno.pevne()
-        if self.stlacene[pygame.K_i]:
+        if klaves == pygame.K_i:
             self.nastalaUdalost("Instant kill")
-        if self.stlacene[pygame.K_n]:
+        if klaves == pygame.K_n:
             hra.nahradSvet(Hra())
 
 
