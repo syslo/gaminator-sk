@@ -82,6 +82,7 @@ class SurfaceVec(Vec):
         self.miesto_dole = h - self._shiftY - self._orez_dole
         self.miesto_vlavo = self._shiftX - self._orez_vlavo
         self.miesto_vpravo = w - self._shiftX - self._orez_vpravo
+        self._mask = pygame.mask.from_surface(self._surface)
 
     def _set_surface(self, surface):
         self._surface = surface
