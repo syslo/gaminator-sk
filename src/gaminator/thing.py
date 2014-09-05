@@ -56,7 +56,12 @@ class Vec(object):
             self.y - self.miesto_hore
         )
 
+    # nevieme zabepecit, aby nejaka vec nebola znicena viac krat, tak aby sa
+    # nezrubala cela hra, dovolime ju deregistrovat len raz
+    _destroyed = False
     def znic(self):
+        if self._destroyed: return None
+        self._destroyed = True
         self._deregister()
 
     def _deregister(self):
