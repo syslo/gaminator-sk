@@ -38,6 +38,9 @@ class Svet(object):
     def svet(self):
         return self
 
+    def nakresli(self,kreslic):
+        pass
+
     def nastav(self):
         pass
 
@@ -101,6 +104,7 @@ class Svet(object):
             self._emitters["coll"].emit(thing1, cls2, thing2)
 
         # Repaint
+        self.nakresli(Kreslic(x=0,y=0))
         if self._resort_things:
             self._things_sorted = sorted(self._things, key=lambda x: x._z)
             self._resort_things = False

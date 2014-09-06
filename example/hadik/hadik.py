@@ -84,7 +84,7 @@ class Had(Vec):
 	def nakresli(self, kreslic):
 		kreslic.farba = Farba.CIERNA
 		kreslic.elipsa( (- MIERKA//2, - MIERKA//2), MIERKA, MIERKA)
-
+		
 	def pridaj_telo(self):
 		self.dlzka += 1
 		if self.k_chvostu == 0:
@@ -102,10 +102,12 @@ class Had(Vec):
 	def klaves(self, klaves, unicode):
 		if self.pauza:
 			return
-		if klaves == pygame.K_LEFT:
-			self.smer = (self.smer - 1 + 4) % 4
-		elif klaves == pygame.K_RIGHT:
-			self.smer = (self.smer + 1 + 4) % 4
+		klavesy = [pygame.K_LEFT, pygame.K_UP, pygame.K_RIGHT, pygame.K_DOWN]
+		for i in range(4):
+			if (klaves == klavesy[i]) and ( (i+2) % 4 != self.smer ):
+				self.smer = i
+				break
+				
 		
 	@priZrazke(Cast_tela)
 	def zarazka_so_sebou(self, cast):
@@ -150,7 +152,7 @@ class Jedlo(Obrazok):
 		if typ == "NONE":
 			pass
 		else:
-			self.nastavSubor("obr/"+typ+"c.png")
+			self.nastavSubor(os.path.join("obr", self.typ + "c.png") )
 
 		self.nove_miesto()
 		self.miesto_vlavo=self.miesto_vpravo=self.miesto_dole=self.miesto_hore = 10
@@ -274,7 +276,7 @@ class Level(Svet):
 
 		#UI
 		panel = Horny_panel(self)
-		pozadie = Pozadie(self, "obr/level"+str(self.level)+".png")
+		pozadie = Pozadie(self, os.path.join("obr","level"+str(self.level)+".png"))
 			
 	def uloz_hraca(self, save):
 		with open(save,"w") as f: 
