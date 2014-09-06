@@ -62,7 +62,6 @@ class _Game:
 
             self._screen.fill(Farba.BIELA)
 
-
             self._worlds[-1]._tick()
 
             pygame.display.flip()

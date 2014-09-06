@@ -8,6 +8,7 @@ import os
 class SurfaceVec(Vec):
 
     def __init__(self, *args, **kwargs):
+        self._maskuj = True
         self._orez_hore = 0
         self._orez_dole = 0
         self._orez_vpravo = 0
@@ -18,6 +19,15 @@ class SurfaceVec(Vec):
         self._shiftY = 0
         self._surface = pygame.Surface((0, 0))
         super(SurfaceVec, self).__init__(*args, **kwargs)
+
+    @property
+    def maskuj(self):
+        return self._maskuj
+
+    @maskuj.setter
+    def maskuj(self, value):
+        self._maskuj = value
+        self._recalculate()
 
     @property
     def orez_hore(self):
@@ -82,7 +92,10 @@ class SurfaceVec(Vec):
         self.miesto_dole = h - self._shiftY - self._orez_dole
         self.miesto_vlavo = self._shiftX - self._orez_vlavo
         self.miesto_vpravo = w - self._shiftX - self._orez_vpravo
-        self._mask = pygame.mask.from_surface(self._surface)
+        if self.maskuj:
+            self._mask = pygame.mask.from_surface(self._surface)
+        else:
+            self._mask = None
 
     def _set_surface(self, surface):
         self._surface = surface
@@ -94,10 +107,68 @@ class SurfaceVec(Vec):
 
 
 class Obrazok(SurfaceVec):
-
     def nastavSubor(self, *paths):
         path = os.path.join(*paths)
         self._set_surface(pygame.image.load(path))
+
+# Animovany obrazok.
+# Ma dve zlozky -- typ a snimku.
+# Defaultne sa kazdych `pomalost` krokov zvacsi snimla o `rychlost`.
+# Da sa vyrobit s dlazdicoveho obrazku, typ je riadok a snimky su stlpce
+
+class Animacia(SurfaceVec):
+    def __init__(self, *args, **kwargs):
+        self._frame_list = []
+        self._typ = 0
+        self._snimka = 0
+        self.rychlost = 1
+        self.pomalost = 1
+        self._cakaj = 0
+        super(Animacia, self).__init__(*args, **kwargs)
+        self._set_surface(self._surfaces[self._typ][self._snimka])
+
+    @property
+    def typ(self):
+        return self._typ
+
+    @typ.setter
+    def typ(self, value):
+        self._typ = value % len(self._surfaces)
+        self._set_surface(self._surfaces[self._typ][self._snimka])
+
+    @property
+    def snimka(self):
+        return self._snimka
+
+    @snimka.setter
+    def snimka(self, value):
+        self._snimka = value % len(self._surfaces[self._typ])
+        self._set_surface(self._surfaces[self._typ][self._snimka])
+
+    def vytvorZMriezky(self, sirka, vyska, *paths, **kwargs):
+        path = os.path.join(*paths)
+        mriezka = pygame.image.load(path)
+        celasirka = mriezka.get_width()
+        celavyska = mriezka.get_height()
+        self._surfaces = []
+        for riadok in range(celavyska//vyska):
+            self._surfaces.append([])
+            for stlpec in range(celasirka//sirka):
+                surface = pygame.Surface((sirka, vyska),
+                    flags=mriezka.get_flags())
+                surface.blit(mriezka, (0,0),
+                    (stlpec*sirka, riadok*vyska, sirka, vyska))
+                self._surfaces[riadok].append(surface)
+
+        if kwargs.get("splosti", False):
+            surfaces = []
+            map(surfaces.extend, self._surfaces)
+            self._surfaces = [surfaces]
+
+    def krok(self):
+        self._cakaj = (self._cakaj + 1) % self.pomalost
+        if self.rychlost and self._cakaj == 0:
+            self.snimka += self.rychlost
 
 
 class Text(SurfaceVec):

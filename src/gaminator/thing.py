@@ -85,6 +85,6 @@ def _prekry_masky(vec1, vec2, prienik_x, prienik_y):
                                (vec1.x - vec1.miesto_vlavo - prienik_x[0],
                                 vec1.y - vec1.miesto_hore - prienik_y[0]));
 
-    return vec2.overlap(vec1._mask,
+    return vec2._mask.overlap(vec1._mask,
         (vec1.x - vec1.miesto_vlavo - vec2.x + vec2.miesto_vlavo,
          vec1.y - vec1.miesto_hore - vec2.y + vec2.miesto_hore))
