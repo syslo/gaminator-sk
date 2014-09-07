@@ -63,7 +63,7 @@ class Vec(object):
         self.x, self.y = self.x + posun_x, self.y + posun_y
         
         for thing in self.svet._things_by_class[trieda]:
-            if self.prekryva(thing):
+            if self != thing and self.prekryva(thing):
                 self.x, self.y = temp_x, temp_y
                 return thing
         self.x, self.y = temp_x, temp_y

@@ -98,7 +98,7 @@ class Svet(object):
             for cls2 in self._emitters["coll"].classes_for(thing1):
                 if cls2 in self._things_by_class:
                     for thing2 in self._things_by_class[cls2]:
-                        if thing1.prekryva(thing2):
+                        if thing1 != thing2 and thing1.prekryva(thing2):
                             collisions.append((thing1, cls2, thing2))
         for thing1, cls2, thing2 in collisions:
             self._emitters["coll"].emit(thing1, cls2, thing2)

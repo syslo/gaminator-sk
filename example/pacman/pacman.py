@@ -4,8 +4,10 @@ sys.path.append(os.path.abspath(os.path.join('..', '..', 'src')))
 
 from gaminator import *
 from random import randint
+from collections import deque
 
 MRIEZKA = 32
+NEKONECNO = 1023456789
 
 class Stena(Obrazok):
     def nastav(self):
@@ -53,6 +55,7 @@ class Pacman(Animacia):
     def krok(self):
         # otcovska trieda je Animacia, cize vdaka tomuto sa Pacman animuje
         super(Pacman, self).krok()
+        self.svet.aktualizujVzdialenosti(self)
     
         if self.pohyb == 0:
             if self.svet.stlacene[pygame.K_UP]: 
@@ -91,6 +94,7 @@ class Duch(Animacia):
     dy = [0, 1, 0, -1]
     # ako dlho ma byt zblednuty, ked Pacman zjedol Cukrik
     cas_zblednutia = 10
+    pocet_inst = 0
 
     def nastav(self):
         # nacita obrazky pre animacie
@@ -102,20 +106,25 @@ class Duch(Animacia):
         # akym smerom som sa naposledy hybal
         self.smer = randint(0,3)
         # akej som farby (cislo od 0 po 3)
-        self.snimka = randint(0,3)
+        self.snimka = Duch.pocet_inst
+        Duch.pocet_inst += 1
         # rychlost pohybu v pixloch za krok
         # kolko pixelov pohybu mi ostava
         self.pohyb = 0
         # idealne delitel cisla MRIEZKA pre plynulejsi pohyb
         self.rychlost = 1
+   
+        self.svet.aktualizujVzdialenosti(self)
 
     # nasledovne konstanty ovplyvnuju pohyb ducha, cim vyssie skore,
     # tym vacsia pravdepodobnost, ze sa duch pohne danym smerom
-    skore_rovno = 5 
-    skore_vzad = 1
-    skore_zaboc = 3
+    skore_rovno = 7 
+    skore_vzad = 3
+    skore_zaboc = 5
     # aky velky vplyv na vyber ma vzdialenost od Pacmana
-    skore_vzdialenost = 2
+    # (normalne, bledy)
+    skore_vzd = (2, -2)
+    skore_inyduch = -5
 
     # nahodne si vyber smer, ktorym sa budes dalej hybat
     def zacniPohyb(self):
@@ -124,9 +133,18 @@ class Duch(Animacia):
         skore[(self.smer+2)%4] += self.skore_vzad
         skore[(self.smer+1)%4] += self.skore_zaboc
         skore[(self.smer-1)%4] += self.skore_zaboc
+        vzd = self.svet.vzdialenost(self.x, self.y)
 
         for i in range(len(skore)):
+            skore[i] += ((vzd - 
+                self.svet.vzdialenost(self.x + MRIEZKA*self.dx[i],
+                                      self.y + MRIEZKA*self.dy[i]) ) * 
+                self.skore_vzd[self.bledost > 0])
+            if self.narazilBySom(Duch, MRIEZKA*self.dx[i], MRIEZKA*self.dy[i]):
+                skore[i] += self.skore_inyduch
             if self.narazilBySom(Stena, MRIEZKA*self.dx[i], MRIEZKA*self.dy[i]):
+                skore[i] = 0
+            if skore[i] < 0:
                 skore[i] = 0
         celkove_skore = sum(skore)
         if celkove_skore > 0:
@@ -137,6 +155,7 @@ class Duch(Animacia):
                 smer += 1
             self.smer = smer
             self.pohyb = MRIEZKA
+
 
     def krok(self):
         if self.pohyb <= 0:
@@ -167,13 +186,15 @@ class Pozadie(Vec):
         self.x = 0
         self.y = 0
         # vykresli sa ako prve, lebo je najhlbsie
-        self.z = -10000000
+        self.z = -NEKONECNO
 
     def nakresli(self, kreslic):
         kreslic.farba = self.farba
         kreslic.obdlznik((0, 0), okno.sirka, okno.vyska)
 
 class Hra(Svet):
+    dx = [1, 0, -1, 0]
+    dy = [0, 1, 0, -1]
     mriezka = 32
     legenda = {
         '#':Stena,
@@ -182,6 +203,28 @@ class Hra(Svet):
         'D':Duch,
         'P':Pacman,
     }
+
+    # aktualizuje tepelnu mapu, podla pacmana
+    def aktualizujVzdialenosti(self, pacman):
+        self.vzd = [[NEKONECNO for policko in riadok] for riadok in self.level]
+        fronta = deque()
+        y, x = pacman.y // MRIEZKA, pacman.x // MRIEZKA
+        self.vzd[y][x] = 0
+        fronta.append((y,x))
+        while len(fronta):
+            y, x = fronta.popleft()
+            if self.level[y][x] == '#':
+                continue
+            for i in range(len(self.dx)):
+                yy, xx = y+self.dy[i], x+self.dx[i]
+                if self.vzd[yy][xx] > self.vzd[y][x] + 1:
+                    self.vzd[yy][xx] = self.vzd[y][x] + 1
+                    fronta.append((yy,xx))
+
+    # vrati vzdialenost od pacmana (pocet policok)
+    def vzdialenost(self, x, y):
+        y, x = y // MRIEZKA, x // MRIEZKA
+        return self.vzd[y][x] 
 
     def vytvorLevel(self, subor):
         self.level = open(subor, 'r').read().strip().split('\n')
@@ -203,6 +246,11 @@ class Hra(Svet):
         Pozadie(self)
         self.level = ['#']
         self.vytvorLevel('level1.txt')
+    
+    @priUdalosti("KLAVES DOLE")
+    def klaves(self, klaves, unicode):
+        if klaves == pygame.K_ESCAPE:
+            hra.koniec()
 
 hra.start(Hra())
 
