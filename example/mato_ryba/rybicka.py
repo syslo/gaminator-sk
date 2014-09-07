@@ -62,7 +62,7 @@ class Zralok(Vec):
     def krok(self):
         self.x -= 2
         if self.y > r.y + r.miesto_vpravo + self.miesto_vlavo:
-            self.y -= (self.y - r.y)/VYSKA*5
+            self.y -= (self.y - r.y)/VYSKA*5.
         if self.x + self.miesto_vlavo + self.miesto_vpravo < 0:
             self.x = SIRKA+100
 
@@ -74,13 +74,13 @@ class Zralok(Vec):
 class Papanica(Vec):
     def nastav(self):
         self.miesto_hore = self.miesto_dole = self.miesto_vpravo = self.miesto_vlavo = 5
-        self.x = r.x + random.randint(-20, 20) + (random.randint(0, 2)*2-1)/(max(r.y,1))*10
-        self.y = 0
         self.rychlost = random.randint(1, 5)
         self.vyzivnost = self.rychlost*10
+        self.x = (r.x + (1+self.rychlost)*random.randint(-10, 10) + (random.randint(0, 2)*2-1)*(r.miesto_vlavo + r.miesto_vpravo)**1.2/(max(r.y, 1)*2)**0.2) % SIRKA
+        self.y = 0
     def nakresli(self, kreslic):
         kreslic.farba = Farba(100 + self.vyzivnost*3, 50, 0)
-        kreslic.elipsa((0,0), 10, 10)
+        kreslic.elipsa((0, 0), 10, 10)
     def krok(self):
         if self.y + self.miesto_hore > VYSKA:
             self.znic()
@@ -107,8 +107,8 @@ class Hra(Svet):
         zradlo = Papanica(self)
 
         self.body = Text(self)
-        self.body.zarovnajX = 1.0  # zarovnaj vlavo
-        self.body.zarovnajY = 0.0  # zarovnaj hore
+        self.body.zarovnajX = 1.0
+        self.body.zarovnajY = 0.0
         self.body.x = SIRKA - 5
         self.body.y = 5
         self.body.aktualizuj(velkost=18)
