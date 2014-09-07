@@ -1,0 +1,186 @@
+%Tu si môžete zaznačiť, že pracujete na danej veci. V prípade, že ste napísali len časť a ďalej už
+%nechcete, alebo ste hotoví tak sa odtiaľ odpíšte. Bolo by však fajn, aby jedu vec robil jeden
+%človek ak celok a zvyšný len kontrolovali
+%vypracuva: Zaba 
+\input ../include/include.tex
+
+\begin{document}
+
+\velkynadpis{C++ ťahák}
+
+Každý program napísaný v C++ má obsahovať jednu hlavnú funkciu \texttt{main()}. Preto najjednoduchší
+program vyzerá nasledovne.
+
+\lstlang{cpp}\begin{lstlisting}
+int main(){
+}
+\end{lstlisting}
+
+Nezabudnite, že každý program musíte pred spustením skompilovať (v DevC++ \texttt{F9}) -- vytvoriť
+spustiteľnú binárku a až potom ho spustiť (v DevC++ \texttt{F10}). (V DevC++ môžete použiť aj
+\texttt{F11} -- skompiluje a rovno spustí.)
+
+\nadpis{Premenné}
+
+Premenná je krabička (miesto v pamäti), kde si program ukladá dáta. Každá premenná má svoj
+\texttt{typ} (určuje, aké dáta sa tam dávajú), \texttt{meno} (jednoznačný identifikátor) a
+samozrejme obsahuje \texttt{hodnotu} príslušného typu.
+
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+Typ & Slovný popis & Počet bitov & Rozsah & Poznámka \\ \hline
+int & celé čísla & $32$ & $-2^{31}\ ..\ 2^{31}-1$ &  \\ \hline
+long long & celé čísla & $64$ & $-2^{63}\ ..\ 2^{63}-1$ &  \\ \hline
+char & znak & 8 & & čísla z ASCII tabuľky \\ \hline
+bool & pravda/nepravda & $8$ (občas aj $32$ alebo $64$) & \texttt{true}/\texttt{false} & \\ \hline
+string & reťazec znakov & & & knižnica \texttt{string} \\ \hline
+\end{tabular}
+
+Premenné treba pred použitím zadeklarovať (povedať akého typu je a ako sa volá). Následne pomocou
+znaku \texttt{=} vieme do premennej priraďovať hodnotu alebo výraz zložený z matematických
+operátorov a iných premenných.
+
+\lstlang{cpp}\begin{lstlisting}
+int main() {
+    int a, b=4; //tu som si zadeklaroval dve premenne typu int, v b je teraz 4
+    a = 4; //do a priradim tiez 4
+    b = 2*b+a-3; //do b priradim hodnotu vyrazu napravo
+}
+\end{lstlisting}
+
+\nadpis{Načítavanie vstupu a výpis výstupu -- knižnica iostream}
+
+Na načítavanie a vypisovanie používame funkcie \texttt{cin} a \texttt{cout}, ktoré patria do
+knižnice \texttt{iostream}. Nezabudnite na magický riadok \texttt{using namespace std;}
+
+\lstlang{cpp}\begin{lstlisting}
+#include <iostream>
+using namespace std;
+
+int main() {
+    int a,b;
+    //nacitam dve cisla na vstupe, prve do premennej a, druhe do b
+    cin >> a >> b;
+    //vypisem na vystup cislo b, medzeru, a, text " sucet ", ich sucet a+b a koniec riadka (enter)
+    cout << b << " " << a << " sucet " << a+b << endl;
+}
+\end{lstlisting}
+
+\nadpis{Načítavanie vstupu a výpis výstupu -- knižnica cstdio}
+
+Na načítavanie a vypisovanie používame funkcie \texttt{scanf()} a \texttt{printf()}, ktoré patria do
+knižnice \texttt{cstdio}.
+
+\lstlang{cpp}\begin{lstlisting}
+#include <cstdio>
+
+int main() {
+    int a,b;
+    //nacitam dve cisla na vstupe, prve do premennej a, druhe do b
+    scanf("%d %d",&a,&b);
+    //vypisem na vystup cislo b, medzeru, a, text " sucet ", ich sucet a+b a koniec riadka (enter)
+    printf("%d %d sucet %d\n",b,a,a+b);
+}
+\end{lstlisting}
+
+\nadpis{Podmienky}
+
+Ak chceme aby sa program správal inak za splnení istej podmienky, použijeme príkaz \texttt{if}. Ten
+zjednodušene vyzerá \texttt{if(<podmienka>) <prikaz>;}. To znamená, \texttt{Ak platí <podmienka>
+vykonaj <príkaz>}. \textbf{Nezabudnite}, že porovnávanie dvoch vecí sa vykonáva pomocou \textbf{dvoch}
+rovná sa \texttt{==}. Ak chcem vykonať po splnení \texttt{if}u viac príkazov, uzavriem ich do
+kučeravých zátvoriek. Takto vyzerá použitie:
+
+\lstlang{cpp}\begin{lstlisting}
+int main() {
+    int x,p;
+    //jednoducha podmienka if
+    if(x == 4) p=8;
+    //podmienka if s vetvou else
+    if(p<10) x=x+2;
+    else x=x+14;
+    //vetvena podmienka if
+    if(x%3 == 0) x=4;
+    else if(x%3 == 1) {x=13; p=8;}
+    else x=6;
+}
+\end{lstlisting}
+
+Podmienka vie byť ľubovoľný vyraz, ktorý vieme vyhodnotiť ako \texttt{true} alebo \texttt{false}.
+Takisto však vieme skladať viac výrazov pomocou logických spojek \texttt{and} -- \texttt{\&\&} a
+\texttt{or} -- \texttt{||}.
+
+Priraď do premennej $x$ číslo $5$, ak $x$ sa rovná $4$ \textbf{alebo} je $p$ rovné $8$ \textbf{a} x
+rovné $7$.
+\lstlang{cpp}\begin{lstlisting}
+if(x==4 || (p==8 && x==7)) x=5;
+\end{lstlisting}
+
+\nadpis{Cykly}
+
+Ak chceme aby sa nám nejaká časť programu opakovala viac krát, môžeme použiť cykly. Základný cyklus
+je príkaz \texttt{for}.
+
+Na vypísanie čísiel od $1$ po $10$ môžeme použiť nasledovný kus programu.
+
+\lstlang{cpp}\begin{lstlisting}
+for(int i=1; i<=10; i++)
+    cout << i << endl;
+\end{lstlisting}
+
+Význam toho: vytvor premennú cyklu $i$. Kým platí podmienka ($i <= 10$) vykonávaj príkaz za
+\texttt{for}om a po každom vykonaní zmeň premennú $i$ podľa posledného príkazu ($i++$ -- pričítaj
+$1$). Ak chcem vykonať viac príkazov v cykle, použijem \textbf{kučeravé zátvorky}.
+
+Vypíš párne čísla medzi $20$ až $40$ by sa zapísalo:
+\lstlang{cpp}\begin{lstlisting}
+for(int j=20; j<=40; j=j+2)
+    cout << j << endl;
+\end{lstlisting}
+
+Všestrannejší spôsob cyklu v programe je použiť cyklus \texttt{while}, ktorý funguje
+\texttt{while(<podmienka>) {<príkazy>};} --  kým platí \texttt{<podmienka>} vykonávaj
+\texttt{<príkazy>}.
+
+\lstlang{cpp}\begin{lstlisting}
+int i=1;
+while(i<=10) {
+    cout << i << endl;
+    i++;
+}
+\end{lstlisting}
+
+Spraví presne to, čo prvý \texttt{for} cyklus -- vypíše čísla od $1$ po $10$.
+
+\nadpis{Polia}
+
+Ak chceme naraz vytvoriť a používať množstvo premenných rovnakého typu, môžeme použiť \texttt{pole}.
+Pole deklaruje naraz množstvo premenných uložených za sebou, ku ktorým sa dá pristupovať pomocou ich
+pozície. Pozor, ak máme pole veľkosti $100$, pozície sú číslované od $0$, takže sa viem pozerať len
+na pozície $0$ až $99$ a \textbf{neviem sa pozerať} na pozíciu $100$.
+
+Pri deklarácií musí byť veľkosť poľa určená konštantou, nie premennou.
+
+Tento program vypočíta prvých $30$ Fibonacciho čísiel a uloží ho do pola $a$. Na pozícii $i$ je
+$i$-te Fibonacciho číslo.
+
+\lstlang{cpp}\begin{lstlisting}
+int main() {
+    //vytvori pole intov s nazvom a, obsahujucim 47 intov
+    int A[47];
+    A[0]=0; A[1]=1;
+    for(int i=2; i<30; i++)
+        A[i] = A[i-1] + A[i-2];
+}
+\end{lstlisting}
+
+A takisto, keďže aj pole je len typ premennej, viem robiť polia viacrozmerné -- polia polí.
+
+\lstlang{cpp}\begin{lstlisting}
+int A[15][20];
+A[5][4] = 1;
+A[3][8] = A[5][4];
+int B[100][10][10];
+\end{lstlisting}
+
+\end{document}
