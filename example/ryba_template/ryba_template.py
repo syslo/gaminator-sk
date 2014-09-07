@@ -3,7 +3,6 @@ import os
 sys.path.append(os.path.abspath(os.path.join('..','..', 'src')))
 
 from gaminator import *
-import random
 
 okno.sirka = 600
 okno.vyska = 400
@@ -21,36 +20,46 @@ class Info_panel(Vec):
     def krok(self):
         self.sytost_text.aktualizuj(text = "Sytost: " + str(self.svet.rybka.sytost))
 
-class Zralok(Vec):
+
+class Jedlo(Vec):
     def nastav(self):
+        pass
+
+    def krok(self):
         pass
 
     def nakresli(self,kreslic):
         pass
 
-    def krok(self):
-        pass
 
 class Ryba(Vec):
     def nastav(self):
         self.sytost = 500
         pass
 
-    def nakresli(self,kreslic):
-        pass
-
     def krok(self):
         pass
 
+    @priZrazke(Jedlo)
+    def zjemJedlo(self,jedlo):
+        pass
 
-class Jedlo(Obrazok):
+    def nakresli(self,kreslic):
+        pass
+
+
+class Zralok(Vec):
     def nastav(self):
         pass
 
-    def nakresli(self,kreslic):
+    def krok(self):
         pass
 
-    def krok(self):
+    @priZrazke(Ryba)
+    def zjemRybu(self,ryba):
+        pass
+
+    def nakresli(self,kreslic):
         pass
 
 
@@ -70,7 +79,8 @@ class Akvarium(Svet):
         pass
 
     def krok(self):
-        pass
+        if(self.stlacene[pygame.K_ESCAPE]):
+            hra.koniec()
 
 hra.fps = 50
 hra.start(Akvarium())
