@@ -28,6 +28,11 @@ class Cukrik(Obrazok):
 class Pacman(Animacia):
     dx = [1, 0, -1, 0]
     dy = [0, 1, 0, -1]
+    
+    # kolko zkore dostane za co
+    skore_jedlo = 1
+    skore_cukrik = 2
+    skore_duch = 10
 
     def nastav(self):
         # nacita obrazky pre animacie
@@ -56,6 +61,8 @@ class Pacman(Animacia):
         # otcovska trieda je Animacia, cize vdaka tomuto sa Pacman animuje
         super(Pacman, self).krok()
         self.svet.aktualizujVzdialenosti(self)
+        if self.svet.pocet(Jedlo) == 0:
+            hra.skore += 1
     
         if self.pohyb == 0:
             if self.svet.stlacene[pygame.K_UP]: 
@@ -83,17 +90,27 @@ class Pacman(Animacia):
     @priZrazke(Jedlo)
     def zjedene(self, jedlo):
         jedlo.znic()
+        hra.skore += self.skore_jedlo
 
     @priZrazke(Cukrik)
     def boost(self, cukrik):
         cukrik.znic()
+        hra.skore += self.skore_cukrik
         self.svet.nastalaUdalost("Boost")
+    
+    @priUdalosti("Pacman zomrel")
+    def zomri(self):
+        self.pohyb = 0
+        self.stojim = True 
+        hra.skore = 0
+        self.x, self.y = self.vznik_x, self.vznik_y
 
 class Duch(Animacia):
     dx = [1, 0, -1, 0]
     dy = [0, 1, 0, -1]
     # ako dlho ma byt zblednuty, ked Pacman zjedol Cukrik
-    cas_zblednutia = 10
+    cas_zblednutia = 12
+    cas_blikania = 1
     pocet_inst = 0
 
     def nastav(self):
@@ -156,7 +173,6 @@ class Duch(Animacia):
             self.smer = smer
             self.pohyb = MRIEZKA
 
-
     def krok(self):
         if self.pohyb <= 0:
             self.zacniPohyb()
@@ -169,6 +185,10 @@ class Duch(Animacia):
             self.pohyb -= zmena
 
         self.bledost -= 1
+        if (self.bledost > 0 and
+            self.bledost < hra.fps * self.cas_blikania and
+            self.bledost % 8 == 0):
+            self.typ = 1-self.typ
         if self.bledost == 0:
             self.odbledni()
 
@@ -180,6 +200,28 @@ class Duch(Animacia):
     def odbledni(self):
         self.typ = 0
 
+    @priZrazke(Pacman)
+    def suboj(self, pacman):
+        if self.bledost > 0:
+            hra.skore += pacman.skore_duch
+            self.zomri()
+        else:
+            self.svet.nastalaUdalost("Pacman zomrel")
+    
+    @priUdalosti("Pacman zomrel")
+    def zomri(self):
+        self.pohyb = 0
+        self.bledost = 0
+        self.typ = 0
+        self.x, self.y = self.vznik_x, self.vznik_y
+
+class Skore(Text):
+    def nastav(self):
+        self.aktualizuj('Skore: ', Farba.ZELENA, 30)
+
+    def krok(self):
+        self.aktualizuj('Skore: %s' % hra.skore)
+    
 class Pozadie(Vec):
     def nastav(self):
         self.farba = Farba.CIERNA
@@ -199,9 +241,10 @@ class Hra(Svet):
     legenda = {
         '#':Stena,
         '.':Jedlo,
-        'o':Cukrik,
+        'O':Cukrik,
         'D':Duch,
         'P':Pacman,
+        'o':Skore,
     }
 
     # aktualizuje tepelnu mapu, podla pacmana
@@ -241,6 +284,7 @@ class Hra(Svet):
                     vec = self.legenda[self.level[i][j]](self)
                     vec.y = i * self.mriezka + self.mriezka//2
                     vec.x = j * self.mriezka + self.mriezka//2
+                    vec.vznik_y, vec.vznik_x = vec.y, vec.x
 
     def nastav(self):
         Pozadie(self)
@@ -252,5 +296,7 @@ class Hra(Svet):
         if klaves == pygame.K_ESCAPE:
             hra.koniec()
 
+okno.nazov = "Pacman"
+hra.skore = 0
 hra.start(Hra())
 
