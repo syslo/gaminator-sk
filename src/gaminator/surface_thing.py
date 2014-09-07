@@ -88,10 +88,10 @@ class SurfaceVec(Vec):
         h = self._surface.get_height()
         self._shiftX = int(self._zarovnajX*w)
         self._shiftY = int(self._zarovnajY*h)
-        self.miesto_hore = self._shiftY - self._orez_hore
-        self.miesto_dole = h - self._shiftY - self._orez_dole
-        self.miesto_vlavo = self._shiftX - self._orez_vlavo
-        self.miesto_vpravo = w - self._shiftX - self._orez_vpravo
+        self.miestoHore = self._shiftY - self._orez_hore
+        self.miestoDole = h - self._shiftY - self._orez_dole
+        self.miestoVlavo = self._shiftX - self._orez_vlavo
+        self.miestoVpravo = w - self._shiftX - self._orez_vpravo
         if self.maskuj:
             self._mask = pygame.mask.from_surface(self._surface)
         else:
