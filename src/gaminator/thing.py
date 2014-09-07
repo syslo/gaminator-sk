@@ -14,6 +14,7 @@ class Vec(object):
         self.miesto_vpravo = 0
         self.miesto_vlavo = 0
         self._mask = None
+        self._destroyed = False
         self.x = 0
         self.y = 0
         self._z = 0
@@ -69,11 +70,9 @@ class Vec(object):
         self.x, self.y = temp_x, temp_y
         return None
 
-    # nevieme zabepecit, aby nejaka vec nebola znicena viac krat, tak aby sa
-    # nezrubala cela hra, dovolime ju deregistrovat len raz
-    _destroyed = False
     def znic(self):
-        if self._destroyed: return None
+        if self._destroyed:
+            return None
         self._destroyed = True
         self._deregister()
 
