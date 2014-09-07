@@ -199,6 +199,11 @@ class Akvarium(Svet):
     def krok(self):
         if(self.svet.stlacene[pygame.K_ESCAPE]):
             hra.koniec()
+        if(self.svet.stlacene[pygame.K_f]):
+            okno.celaObrazovka()
+        if(self.svet.stlacene[pygame.K_w]):
+            okno.pevne()
+
         #if(self.svet.stlacene[pygame.K_SPACE]):
         #    hra.koniec()
 
