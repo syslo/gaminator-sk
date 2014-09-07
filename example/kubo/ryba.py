@@ -14,7 +14,7 @@ class Ryba(Vec):
 	def nastav(self):
 		self.x = okno.sirka/2
 		self.y = okno.vyska/2
-		#self.miesto_hore = 
+		#self.miestoHore =
 	
 	def nakresli(self, kreslic):
 		#kreslic.farba = Farba(30,200,30)

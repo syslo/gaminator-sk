@@ -26,10 +26,10 @@ class Zralok(Vec):
     def nastav(self):
         self.x = okno.sirka+50
         self.y = okno.vyska/2
-        self.miesto_hore = 15
-        self.miesto_dole = 15
-        self.miesto_vpravo = 35
-        self.miesto_vlavo = 25
+        self.miestoHore = 15
+        self.miestoDole = 15
+        self.miestoVpravo = 35
+        self.miestoVlavo = 25
 
     def nakresli(self,kreslic):
         kreslic.farba = Farba(0,0,0)
@@ -57,16 +57,16 @@ class Ryba(Vec):
         self.sytost = 500
         self.x = okno.sirka/2
         self.y = okno.vyska/2
-        self.miesto_hore = 15
-        self.miesto_dole = 15
-        self.miesto_vpravo = 25
-        self.miesto_vlavo = 35
+        self.miestoHore = 15
+        self.miestoDole = 15
+        self.miestoVpravo = 25
+        self.miestoVlavo = 35
         self.poslednySmer = 1
 
     def nakresli(self,kreslic):
         if self.poslednySmer == 1:
-            self.miesto_vpravo = 25
-            self.miesto_vlavo = 35
+            self.miestoVpravo = 25
+            self.miestoVlavo = 35
             kreslic.farba = Farba(256,200,0)
             kreslic.elipsa((-25, -15), 50, 30)
             kreslic.mnohouholnik([(-35,-18),(-35,18),(-15,0)])
@@ -76,8 +76,8 @@ class Ryba(Vec):
             kreslic.farba = Farba(200,0,0)
             kreslic.elipsa((12, 5), 10, 6)
         else:
-            self.miesto_vpravo = 35
-            self.miesto_vlavo = 25
+            self.miestoVpravo = 35
+            self.miestoVlavo = 25
             kreslic.farba = Farba(256,200,0)
             kreslic.elipsa((-25, -15), 50, 30)
             kreslic.mnohouholnik([(35,-18),(35,18),(15,0)])
@@ -90,17 +90,17 @@ class Ryba(Vec):
     def krok(self):
         self.sytost -=1
         if(self.svet.stlacene[pygame.K_UP]):
-            if self.y - self.miesto_hore >= 0:
+            if self.y - self.miestoHore >= 0:
                 self.y -= 4
         if(self.svet.stlacene[pygame.K_DOWN]):
-            if self.y + self.miesto_dole <= okno.vyska:
+            if self.y + self.miestoDole <= okno.vyska:
                 self.y += 4
         if(self.svet.stlacene[pygame.K_LEFT]):
-            if self.x - self.miesto_vlavo >= 0:
+            if self.x - self.miestoVlavo >= 0:
                 self.x -= 4
             self.poslednySmer = -1
         if(self.svet.stlacene[pygame.K_RIGHT]):
-            if self.x + self.miesto_vpravo <= okno.sirka:
+            if self.x + self.miestoVpravo <= okno.sirka:
                 self.x += 4
             self.poslednySmer = 1
 
@@ -119,10 +119,10 @@ class Jedlo(Obrazok):
         self.nastavSubor("jedlo.png")
         self.x = random.randrange(okno.sirka)
         self.y = -5
-        self.miesto_hore = 12
-        self.miesto_dole = 12
-        self.miesto_vpravo = 12
-        self.miesto_vlavo = 12
+        self.miestoHore = 12
+        self.miestoDole = 12
+        self.miestoVpravo = 12
+        self.miestoVlavo = 12
 
     def krok(self):
         self.y += 1

@@ -20,10 +20,10 @@ def randomIntDist(mi, ma, dist):
 
 class Ryba(Vec):
     def nastav(self):
-        self.miesto_hore = 0
-        self.miesto_dole = 30
-        self.miesto_vlavo = 0
-        self.miesto_vpravo = 70
+        self.miestoHore = 0
+        self.miestoDole = 30
+        self.miestoVlavo = 0
+        self.miestoVpravo = 70
         self.sytost = 100
         self.x = SIRKA/2
         self.y = VYSKA/2
@@ -58,10 +58,10 @@ class Ryba(Vec):
 
 class Zralok(Vec):
     def nastav(self):
-        self.miesto_hore = 0
-        self.miesto_dole = 50
-        self.miesto_vlavo = 0
-        self.miesto_vpravo = 140
+        self.miestoHore = 0
+        self.miestoDole = 50
+        self.miestoVlavo = 0
+        self.miestoVpravo = 140
         self.zivot = 1000
         self.x = SIRKA
         self.y = r.y
@@ -73,9 +73,9 @@ class Zralok(Vec):
 
     def krok(self):
         self.x -= 2
-        if self.y > r.y + r.miesto_vpravo + self.miesto_vlavo:
+        if self.y > r.y + r.miestoVpravo + self.miestoVlavo:
             self.y -= (self.y - r.y)/VYSKA*5.
-        if self.x + self.miesto_vlavo + self.miesto_vpravo < 0:
+        if self.x + self.miestoVlavo + self.miestoVpravo < 0:
             self.x = SIRKA+100
 
     @priZrazke(Ryba)
@@ -85,16 +85,16 @@ class Zralok(Vec):
 
 class Papanica(Vec):
     def nastav(self):
-        self.miesto_hore = self.miesto_dole = self.miesto_vpravo = self.miesto_vlavo = 5
+        self.miestoHore = self.miestoDole = self.miestoVpravo = self.miestoVlavo = 5
         self.rychlost = random.randint(1, 5)
         self.vyzivnost = self.rychlost*10
-        self.x = (r.x + (1+self.rychlost)*random.randint(-10, 10) + (random.randint(0, 2)*2-1)*(r.miesto_vlavo + r.miesto_vpravo)**1.2/(max(r.y, 1)*2)**0.2) % SIRKA
+        self.x = (r.x + (1+self.rychlost)*random.randint(-10, 10) + (random.randint(0, 2)*2-1)*(r.miestoVlavo + r.miestoVpravo)**1.2/(max(r.y, 1)*2)**0.2) % SIRKA
         self.y = 0
     def nakresli(self, kreslic):
         kreslic.farba = Farba(100 + self.vyzivnost*3, 50, 0)
         kreslic.elipsa((0, 0), 10, 10)
     def krok(self):
-        if self.y + self.miesto_hore > VYSKA:
+        if self.y + self.miestoHore > VYSKA:
             self.znic()
             self.svet.nastalaUdalost("STVOR PAPANICU")
         self.y += self.rychlost
