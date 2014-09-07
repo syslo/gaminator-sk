@@ -12,10 +12,10 @@ class Ryba(Vec):
 		self.x = SIRKA/2
 		self.y = VYSKA/2
 		self.hlad = 0
-		self.miesto_dole = 15
-		self.miesto_hore = 15
-		self.miesto_vpravo = 30 
-		self.miesto_vlavo = 40
+		self.miestoDole = 15
+		self.miestoHore = 15
+		self.miestoVpravo = 30
+		self.miestoVlavo = 40
 
 	def nakresli(self,kreslic):
 		kreslic.farba = Farba.ZELENA
@@ -33,7 +33,7 @@ class Jedlo(Vec):
 		self.r = 10
 		self.x = SIRKA/2
 		self.y = -2*self.r
-		self.miesto_vlavo = self.miesto_vpravo = self.miesto_hore = self.miesto_dole = self.r
+		self.miestoVlavo = self.miestoVpravo = self.miestoHore = self.miestoDole = self.r
 
 	def nakresli(self,kreslic):
 		kreslic.farba = Farba.ZLTA
@@ -52,10 +52,10 @@ class Zralok(Vec):
 	def nastav(self):
 		self.x = 0
 		self.y = VYSKA/2
-		self.miesto_dole = 25
-		self.miesto_hore = 25
-		self.miesto_vpravo = 70 
-		self.miesto_vlavo = 90
+		self.miestoDole = 25
+		self.miestoHore = 25
+		self.miestoVpravo = 70
+		self.miestoVlavo = 90
 
 	def nakresli(self, kreslic):
 		kreslic.farba = Farba.CIERNA.zmixuj(Farba.BIELA)

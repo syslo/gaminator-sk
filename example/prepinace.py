@@ -7,10 +7,10 @@ from gaminator import *
 class Hrac(Vec):
 
     def nastav(self):
-        self.miesto_hore = 10
-        self.miesto_dole = 10
-        self.miesto_vpravo = 10
-        self.miesto_vlavo = 10
+        self.miestoHore = 10
+        self.miestoDole = 10
+        self.miestoVpravo = 10
+        self.miestoVlavo = 10
         self.x = 200
         self.y = 200
 
@@ -31,10 +31,10 @@ class Hrac(Vec):
 class Prepinac(Vec):
 
     def nastav(self):
-        self.miesto_hore = 10
-        self.miesto_dole = 10
-        self.miesto_vpravo = 10
-        self.miesto_vlavo = 10
+        self.miestoHore = 10
+        self.miestoDole = 10
+        self.miestoVpravo = 10
+        self.miestoVlavo = 10
         self.x = 200
         self.y = 200
         self.farba = Farba.CERVENA

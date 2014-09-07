@@ -11,10 +11,10 @@ VYSKA = 600
 class Papkac(Vec):
 
     def nastav(self):
-        self.miesto_hore = 20
-        self.miesto_dole = 20
-        self.miesto_vpravo = 20
-        self.miesto_vlavo = 20
+        self.miestoHore = 20
+        self.miestoDole = 20
+        self.miestoVpravo = 20
+        self.miestoVlavo = 20
         self.body = 0
         self.zivoty = 10
         self.x = SIRKA/2
@@ -58,10 +58,10 @@ class Superpapkac(Obrazok, Papkac):
 class Jedlo(Vec):
 
     def nastav(self):
-        self.miesto_hore = 10
-        self.miesto_dole = 10
-        self.miesto_vpravo = 10
-        self.miesto_vlavo = 10
+        self.miestoHore = 10
+        self.miestoDole = 10
+        self.miestoVpravo = 10
+        self.miestoVlavo = 10
         self.x = -10
         self.y = random.randint(20, VYSKA-20)
         self.rychlost = random.randint(1, 7)
