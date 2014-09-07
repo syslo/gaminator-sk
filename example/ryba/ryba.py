@@ -136,9 +136,9 @@ class Jedlo(Obrazok):
 
 
 class Akvarium(Svet):
-    okno.nazov="Moje male akvarko"
 
     def nastav(self):
+        okno.nazov="Moje male akvarko"
         self.rybka = Ryba(self)
         Jedlo(self)
         self.zralocik = Zralok(self)
