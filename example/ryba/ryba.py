@@ -12,15 +12,15 @@ okno.pevne()
 
 class Info_panel(Vec):
     def nastav(self):
-        self.najedenost_text = Text(self.svet)
-        self.najedenost_text.x = 0
-        self.najedenost_text.y = 0
-        self.najedenost_text.zarovnajX = 0
-        self.najedenost_text.zarovnajY = 0
-        self.najedenost_text.aktualizuj(velkost=30,farba = Farba(255,255,255))
+        self.sytost_text = Text(self.svet)
+        self.sytost_text.x = 0
+        self.sytost_text.y = 0
+        self.sytost_text.zarovnajX = 0
+        self.sytost_text.zarovnajY = 0
+        self.sytost_text.aktualizuj(velkost=30,farba = Farba(0,0,0))
 
     def krok(self):
-        self.najedenost_text.aktualizuj(text = "Najedenost: " + str(self.svet.najedenost))
+        self.sytost_text.aktualizuj(text = "Sytost: " + str(self.svet.rybka.sytost))
 
 class Zralok(Vec):
     def nastav(self):
@@ -54,13 +54,13 @@ class Zralok(Vec):
 
 class Ryba(Vec):
     def nastav(self):
+        self.sytost = 500
         self.x = okno.sirka/2
         self.y = okno.vyska/2
         self.miesto_hore = 15
         self.miesto_dole = 15
         self.miesto_vpravo = 25
         self.miesto_vlavo = 35
-        self.svet.najedenost = 500
         self.poslednySmer = 1
 
     def nakresli(self,kreslic):
@@ -88,7 +88,7 @@ class Ryba(Vec):
             kreslic.elipsa((-22, 5), 10, 6)
 
     def krok(self):
-        self.svet.najedenost -=1
+        self.sytost -=1
         if(self.svet.stlacene[pygame.K_UP]):
             if self.y - self.miesto_hore >= 0:
                 self.y -= 4
@@ -107,7 +107,7 @@ class Ryba(Vec):
         self.svet.rybka.x = self.x
         self.svet.rybka.y = self.y
 
-        if self.svet.najedenost <= 0:
+        if self.sytost <= 0:
             self.znic()
 
     @priZrazke(Zralok)
@@ -131,7 +131,7 @@ class Jedlo(Obrazok):
 
     @priZrazke(Ryba)
     def zjedene(self,rybka):
-        self.svet.najedenost +=100
+        rybka.sytost +=100
         self.znic()
 
 
@@ -139,10 +139,10 @@ class Akvarium(Svet):
     okno.nazov="Moje male akvarko"
 
     def nastav(self):
-        self.moj_panel = Info_panel(self)
         self.rybka = Ryba(self)
         Jedlo(self)
         self.zralocik = Zralok(self)
+        self.moj_panel = Info_panel(self)
         self.nacasujUdalost(1000,"NoveJedlo")
 
     @priUdalosti("NoveJedlo")

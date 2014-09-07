@@ -1,0 +1,90 @@
+***Faza 0***
+Hovorime si,ze co za hru budeme robit
+
+***Faza 1***
+Hovorime si, ze co nasa hra potrebuje (ake veci, ake maju tieto veci vlastnosti a spravanie)
+-rozdelime si svet a vec
+
+AKVARKO - svet
+-obsahuje veci
+
+RYBA - vec
+vlastnosti
+	-x
+	-y
+	-sytost
+
+spravanie
+	-plava
+	-zerie jedlo
+	-hladne
+	-umiera ked ju zozerie zralok
+	-znic()
+
+ZRALOK - vec
+vlastnosti
+	-x
+	-y
+spravanie
+	-plava
+	-zerie rybu
+	-znic()
+
+JEDLO - vec
+vlastnosti
+	-x
+	-y
+	-vyzivnost
+spravanie
+	-pada
+	-moze byt zozrane
+	-znic()
+
+***Faza 2***
+Filozoficky rozdiel medzi class(TRIEDA) a instance(OBJEKT)
+						  metoda	a 	vlastnost
+
+
+KRUH (resp. OBDLZNIK)
+vlastnosti
+	-polomer
+	-Sx
+	-Sy
+metody
+	-Nakresli
+	-Zvacsi2Krat
+
+vyuzivanie bodkoveho zapisu
+	1. pouzitie bodkove zapisu z vonku
+		-(J1.x, J2.y ...)
+	2. pouzitie bodkoveho zapisu z vnutra
+		-(self.x, self.y)
+
+konstruktor NASTAV
+	-definicia premennych
+
+***Faza 3***
+vseobecne detaily k implementacii
+(ze mame v kode kazdej VECi rozne casti - aby sa nieco spravilo pri vytvoreni, nieco robilo skoro stale, aby sa to vykreslovalo...)
+
+v tejto casti pouzijeme nase metody (spravanie) z prvej fazy a rozdelime ich do jednotlivych casti
+
+priklad:
+RYBA
+	-NASTAV (nie som si ista, ci az takyto detail, alebo nie)
+		self.sytost = 500
+		self.x = okno.sirka/2
+		self.y = okno.vyska/2
+	-NAKRESLI
+		-treba spomenut globalne vs. relativne suradnice!!!
+	-KROK
+		-hladne
+		-hybe sa
+	-PRI ZRAZKE
+		-s jedlom
+			zvysi si sytost a zmizne jedlo
+		-so zralokom
+			umrie
+
+	
+		
