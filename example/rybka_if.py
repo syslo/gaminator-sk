@@ -23,6 +23,13 @@ class Ryba(Vec):
 		self.miesto_vpravo = 30 
 		self.miesto_vlavo = 40
 
+		self.text = Text(self.svet)
+		self.text.x = 10	
+		self.text.y = 10
+		self.text.zarovnajY = 0
+		self.text.zarovnajX = 0
+		self.text.aktualizuj(velkost = 25)
+		
 	def nakresli(self,kreslic):
 		kreslic.farba = Farba.ZELENA
 		kreslic.elipsa( (-30,-15), 60, 30)
@@ -32,7 +39,7 @@ class Ryba(Vec):
 
 	def krok(self):
 		self.sytost = self.sytost - 1
-		okno.nazov = "Sytost: " + str(self.sytost)
+		self.text.aktualizuj("Sytost: " + str(self.sytost))
 		if self.svet.stlacene[pygame.K_UP]:					#IFIFIFIFIFIFIF
 			self.y = max( self.y - 2, 0 )
 		elif self.svet.stlacene[pygame.K_DOWN]:
