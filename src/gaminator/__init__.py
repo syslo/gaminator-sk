@@ -14,6 +14,7 @@ from .surface_thing import Obrazok, Animacia, Text
 from .world import Svet
 from .window import okno
 from .game import hra
+from .utils import nahodneCislo
 
 # noinspection PyUnresolvedReferences
 import pygame
