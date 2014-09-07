@@ -41,7 +41,7 @@ class Svet(object):
     def nastav(self):
         pass
 
-    def nakresli(self):
+    def nakresli(self, kreslic):
         pass
 
     def krok(self):
