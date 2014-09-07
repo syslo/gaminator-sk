@@ -54,6 +54,20 @@ class Vec(object):
         if prienik_x[0] >= prienik_x[1] or prienik_y[0] >= prienik_y[1]:
             return False
         return _prekry_masky(self, vec, prienik_x, prienik_y)
+    
+    # Vrati vec triedy trieda, do ktorej by narazil, keby sa posunul o posun_x a
+    # posun_y, pripadne None, ak nic take nie je.
+    # Ak je veci viac, vrati lubovolnu z nich.
+    def narazilBySom(self, trieda, posun_x = 0, posun_y = 0):
+        temp_x, temp_y = self.x, self.y
+        self.x, self.y = self.x + posun_x, self.y + posun_y
+        
+        for thing in self.svet._things_by_class[trieda]:
+            if self.prekryva(thing):
+                self.x, self.y = temp_x, temp_y
+                return thing
+        self.x, self.y = temp_x, temp_y
+        return None
 
     # nevieme zabepecit, aby nejaka vec nebola znicena viac krat, tak aby sa
     # nezrubala cela hra, dovolime ju deregistrovat len raz
