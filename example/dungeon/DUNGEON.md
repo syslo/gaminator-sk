@@ -23,10 +23,10 @@
 - ovladanie hraca `DONE`
 - zrazky so stenami (v kroku) `DONE`
 - zrazky s priserami (reverse pohybu + efekt)
-- uvodna miestnost + load levelu
+- uvodna miestnost + load levelu `DONE`
 - class prisera 
 - hlupa prisera
 - class item `DONE`
 - jednodychy item `DONE`
 - obrazky vsetkeho (aby nemuseli nic kreslit)
-- dvere
+- dvere `DONE`
