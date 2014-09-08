@@ -6,8 +6,8 @@ sys.path.append(os.path.abspath(os.path.join('..','..', 'src')))
 
 from gaminator import *
 
-rspd = 2
-rfloat = 1
+rspd = 3
+rfloat = 2
 
 #okno.celaObrazovka() prilis nebezpecne, zatial zakomentovane
 
@@ -31,7 +31,7 @@ class Akvarium(Svet):
     @priUdalosti("Jedloooo")
     def davajJedlo(self):
         Jedlo(self)
-        self.nacasujUdalost(100,"Jedloooo")
+        self.nacasujUdalost(1,"Jedloooo")
         
 class Ryba(Vec):
     def nastav(self):
@@ -75,11 +75,10 @@ class Jedlo(Vec):
        # if abs(moja_rybka.x - self.x)<10 and abs(moja_rybka.y - self.y)<10:
        #   print "ZRAZKA"
         self.y += 1
-        print moja_rybka.x, moja_rybka.y
+      #  print moja_rybka.x, moja_rybka.y
     
     @priZrazke(Ryba)
     def zahyn(self,rybka):
         self.znic()
-        print "kolizia"
         
 hra.start(Akvarium())
