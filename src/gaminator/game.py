@@ -37,7 +37,7 @@ class _Game:
         okno.aplikuj()
         self._screen = pygame.display.get_surface()
 
-        clock = pygame.time.Clock()
+        self.clock = pygame.time.Clock()
 
         while not self._end:
 
@@ -65,7 +65,7 @@ class _Game:
             self._worlds[-1]._tick()
 
             pygame.display.flip()
-            clock.tick(self.fps)
+            self.clock.tick(self.fps)
 
         pygame.quit()
 
