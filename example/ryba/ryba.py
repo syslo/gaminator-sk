@@ -12,24 +12,24 @@ okno.pevne()
 
 class Info_panel(Vec):
     def nastav(self):
-        self.najedenost_text = Text(self.svet)
-        self.najedenost_text.x = 0
-        self.najedenost_text.y = 0
-        self.najedenost_text.zarovnajX = 0
-        self.najedenost_text.zarovnajY = 0
-        self.najedenost_text.aktualizuj(velkost=30,farba = Farba(255,255,255))
+        self.sytost_text = Text(self.svet)
+        self.sytost_text.x = 0
+        self.sytost_text.y = 0
+        self.sytost_text.zarovnajX = 0
+        self.sytost_text.zarovnajY = 0
+        self.sytost_text.aktualizuj(velkost=30,farba = Farba(0,0,0))
 
     def krok(self):
-        self.najedenost_text.aktualizuj(text = "Najedenost: " + str(self.svet.najedenost))
+        self.sytost_text.aktualizuj(text = "Sytost: " + str(self.svet.rybka.sytost))
 
 class Zralok(Vec):
     def nastav(self):
         self.x = okno.sirka+50
         self.y = okno.vyska/2
-        self.miesto_hore = 15
-        self.miesto_dole = 15
-        self.miesto_vpravo = 35
-        self.miesto_vlavo = 25
+        self.miestoHore = 15
+        self.miestoDole = 15
+        self.miestoVpravo = 35
+        self.miestoVlavo = 25
 
     def nakresli(self,kreslic):
         kreslic.farba = Farba(0,0,0)
@@ -54,19 +54,19 @@ class Zralok(Vec):
 
 class Ryba(Vec):
     def nastav(self):
+        self.sytost = 500
         self.x = okno.sirka/2
         self.y = okno.vyska/2
-        self.miesto_hore = 15
-        self.miesto_dole = 15
-        self.miesto_vpravo = 25
-        self.miesto_vlavo = 35
-        self.svet.najedenost = 500
+        self.miestoHore = 15
+        self.miestoDole = 15
+        self.miestoVpravo = 25
+        self.miestoVlavo = 35
         self.poslednySmer = 1
 
     def nakresli(self,kreslic):
         if self.poslednySmer == 1:
-            self.miesto_vpravo = 25
-            self.miesto_vlavo = 35
+            self.miestoVpravo = 25
+            self.miestoVlavo = 35
             kreslic.farba = Farba(256,200,0)
             kreslic.elipsa((-25, -15), 50, 30)
             kreslic.mnohouholnik([(-35,-18),(-35,18),(-15,0)])
@@ -76,8 +76,8 @@ class Ryba(Vec):
             kreslic.farba = Farba(200,0,0)
             kreslic.elipsa((12, 5), 10, 6)
         else:
-            self.miesto_vpravo = 35
-            self.miesto_vlavo = 25
+            self.miestoVpravo = 35
+            self.miestoVlavo = 25
             kreslic.farba = Farba(256,200,0)
             kreslic.elipsa((-25, -15), 50, 30)
             kreslic.mnohouholnik([(35,-18),(35,18),(15,0)])
@@ -88,26 +88,26 @@ class Ryba(Vec):
             kreslic.elipsa((-22, 5), 10, 6)
 
     def krok(self):
-        self.svet.najedenost -=1
+        self.sytost -=1
         if(self.svet.stlacene[pygame.K_UP]):
-            if self.y - self.miesto_hore >= 0:
+            if self.y - self.miestoHore >= 0:
                 self.y -= 4
         if(self.svet.stlacene[pygame.K_DOWN]):
-            if self.y + self.miesto_dole <= okno.vyska:
+            if self.y + self.miestoDole <= okno.vyska:
                 self.y += 4
         if(self.svet.stlacene[pygame.K_LEFT]):
-            if self.x - self.miesto_vlavo >= 0:
+            if self.x - self.miestoVlavo >= 0:
                 self.x -= 4
             self.poslednySmer = -1
         if(self.svet.stlacene[pygame.K_RIGHT]):
-            if self.x + self.miesto_vpravo <= okno.sirka:
+            if self.x + self.miestoVpravo <= okno.sirka:
                 self.x += 4
             self.poslednySmer = 1
 
         self.svet.rybka.x = self.x
         self.svet.rybka.y = self.y
 
-        if self.svet.najedenost <= 0:
+        if self.sytost <= 0:
             self.znic()
 
     @priZrazke(Zralok)
@@ -119,10 +119,10 @@ class Jedlo(Obrazok):
         self.nastavSubor("jedlo.png")
         self.x = random.randrange(okno.sirka)
         self.y = -5
-        self.miesto_hore = 12
-        self.miesto_dole = 12
-        self.miesto_vpravo = 12
-        self.miesto_vlavo = 12
+        self.miestoHore = 12
+        self.miestoDole = 12
+        self.miestoVpravo = 12
+        self.miestoVlavo = 12
 
     def krok(self):
         self.y += 1
@@ -131,18 +131,18 @@ class Jedlo(Obrazok):
 
     @priZrazke(Ryba)
     def zjedene(self,rybka):
-        self.svet.najedenost +=100
+        rybka.sytost +=100
         self.znic()
 
 
 class Akvarium(Svet):
-    okno.nazov="Moje male akvarko"
 
     def nastav(self):
-        self.moj_panel = Info_panel(self)
+        okno.nazov="Moje male akvarko"
         self.rybka = Ryba(self)
         Jedlo(self)
         self.zralocik = Zralok(self)
+        self.moj_panel = Info_panel(self)
         self.nacasujUdalost(1000,"NoveJedlo")
 
     @priUdalosti("NoveJedlo")

@@ -35,7 +35,7 @@ class Cast_tela(Vec):
 		self.k_chvostu = 0
 		self.smer = 0
 		self.poradie = 0
-		self.miesto_vlavo = self.miesto_vpravo = self.miesto_hore = self.miesto_dole = 1
+		self.miestoVlavo = self.miestoVpravo = self.miestoHore = self.miestoDole = 1
 
 	def nakresli(self, kreslic):
 		kreslic.farba = Farba.CIERNA
@@ -66,7 +66,7 @@ class Had(Vec):
 		self.smer = smer
 		self.k_chvostu = 0
 		self.dlzka = 0
-		self.miesto_vlavo = self.miesto_vpravo = self.miesto_hore = self.miesto_dole = MIERKA//2
+		self.miestoVlavo = self.miestoVpravo = self.miestoHore = self.miestoDole = MIERKA//2
 		self.z = 100
 		self.x, self.y = x,y
 		for i in range(dlzka): self.pridaj_telo()
@@ -123,12 +123,12 @@ class Stena(Vec):
 	def nastav(self,x1,y1,x2,y2):
 		self.x = x1
 		self.y = y1
-		self.miesto_vpravo = x2-x1
-		self.miesto_dole  = y2-y1
+		self.miestoVpravo = x2-x1
+		self.miestoDole  = y2-y1
 
 	def nakresli(self,kreslic):
 		kreslic.farba = Farba.CIERNA
-		kreslic.obdlznik((0,0), self.miesto_vpravo, self.miesto_dole)
+		kreslic.obdlznik((0,0), self.miestoVpravo, self.miestoDole)
 
 	@priZrazke(Had)
 	def zrazka_s_hadom(self,had):
@@ -155,7 +155,7 @@ class Jedlo(Obrazok):
 			self.nastavSubor(os.path.join("obr", self.typ + "c.png") )
 
 		self.nove_miesto()
-		self.miesto_vlavo=self.miesto_vpravo=self.miesto_dole=self.miesto_hore = 10
+		self.miestoVlavo=self.miestoVpravo=self.miestoDole=self.miestoHore = 10
 			
 	def krok(self):
 		if self.svet.cas > self.vyprsanie: 
@@ -354,20 +354,20 @@ class Level(Svet):
 	def jedlo_FAT(self):
 		global MIERKA
 		MIERKA += 4
-		self.hadik.miesto_vpravo +=2
-		self.hadik.miesto_vlavo  +=2
-		self.hadik.miesto_hore   +=2
-		self.hadik.miesto_dole   +=2
+		self.hadik.miestoVpravo +=2
+		self.hadik.miestoVlavo  +=2
+		self.hadik.miestoHore   +=2
+		self.hadik.miestoDole   +=2
 		self.nacasujUdalost(DLZKA_EFEKTU, "xFAT")
 
 	@priUdalosti("xFAT")
 	def jedlo_xFAT(self):
 		global MIERKA
 		MIERKA -= 4
-		self.hadik.miesto_vpravo -=2
-		self.hadik.miesto_vlavo  -=2
-		self.hadik.miesto_hore   -=2
-		self.hadik.miesto_dole   -=2
+		self.hadik.miestoVpravo -=2
+		self.hadik.miestoVlavo  -=2
+		self.hadik.miestoHore   -=2
+		self.hadik.miestoDole   -=2
 
 #MENU
 

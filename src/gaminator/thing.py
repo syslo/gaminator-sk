@@ -9,11 +9,12 @@ class Vec(object):
 
     def __init__(self, svet, *args, **kwargs):
         self._world = svet
-        self.miesto_hore = 0
-        self.miesto_dole = 0
-        self.miesto_vpravo = 0
-        self.miesto_vlavo = 0
+        self.miestoHore = 0
+        self.miestoDole = 0
+        self.miestoVpravo = 0
+        self.miestoVlavo = 0
         self._mask = None
+        self._destroyed = False
         self.x = 0
         self.y = 0
         self._z = 0
@@ -44,12 +45,12 @@ class Vec(object):
 
     def prekryva(self, vec):
         prienik_x = (
-            max(self.x - self.miesto_vlavo, vec.x - vec.miesto_vlavo),
-            min(self.x + self.miesto_vpravo, vec.x + vec.miesto_vpravo),
+            max(self.x - self.miestoVlavo, vec.x - vec.miestoVlavo),
+            min(self.x + self.miestoVpravo, vec.x + vec.miestoVpravo),
         )
         prienik_y = (
-            max(self.y - self.miesto_hore, vec.y - vec.miesto_hore),
-            min(self.y + self.miesto_dole, vec.y + vec.miesto_dole),
+            max(self.y - self.miestoHore, vec.y - vec.miestoHore),
+            min(self.y + self.miestoDole, vec.y + vec.miestoDole),
         )
         if prienik_x[0] >= prienik_x[1] or prienik_y[0] >= prienik_y[1]:
             return False
@@ -69,11 +70,9 @@ class Vec(object):
         self.x, self.y = temp_x, temp_y
         return None
 
-    # nevieme zabepecit, aby nejaka vec nebola znicena viac krat, tak aby sa
-    # nezrubala cela hra, dovolime ju deregistrovat len raz
-    _destroyed = False
     def znic(self):
-        if self._destroyed: return None
+        if self._destroyed:
+            return None
         self._destroyed = True
         self._deregister()
 
@@ -96,9 +95,9 @@ def _prekry_masky(vec1, vec2, prienik_x, prienik_y):
                                     prienik_y[1] - prienik_y[0]))
         prienik.fill()
         return prienik.overlap(vec1._mask,
-                               (vec1.x - vec1.miesto_vlavo - prienik_x[0],
-                                vec1.y - vec1.miesto_hore - prienik_y[0]));
+                               (vec1.x - vec1.miestoVlavo - prienik_x[0],
+                                vec1.y - vec1.miestoHore - prienik_y[0]));
 
     return vec2._mask.overlap(vec1._mask,
-        (vec1.x - vec1.miesto_vlavo - vec2.x + vec2.miesto_vlavo,
-         vec1.y - vec1.miesto_hore - vec2.y + vec2.miesto_hore))
+        (vec1.x - vec1.miestoVlavo - vec2.x + vec2.miestoVlavo,
+         vec1.y - vec1.miestoHore - vec2.y + vec2.miestoHore))
