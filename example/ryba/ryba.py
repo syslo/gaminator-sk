@@ -206,7 +206,7 @@ class Akvarium(Svet):
 
         #if(self.svet.stlacene[pygame.K_SPACE]):
         #    hra.koniec()
-
+        if (random.randint(1,47) < 2): print hra.clock.get_fps()
 
 
 
