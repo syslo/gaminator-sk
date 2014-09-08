@@ -5,8 +5,8 @@ sys.path.append(os.path.abspath(os.path.join('..','..', 'src')))
 from gaminator import *
 import random
 
-okno.sirka = 1920
-okno.vyska = 1080
+okno.sirka = 800
+okno.vyska = 600
 okno.pevne()
 
 
@@ -148,7 +148,7 @@ class Akvarium(Svet):
     @priUdalosti("NoveJedlo")
     def generujJedlo(self):
         Jedlo(self)
-        self.nacasujUdalost(1000,"NoveJedlo")
+        self.nacasujUdalost(16,"NoveJedlo")
 
     def nakresli(self,kreslic):
         #pozadie
