@@ -1,7 +1,8 @@
 import sys
 import os
 import random
-sys.path.append(os.path.abspath(os.path.join('../..', 'src')))
+#from math import abs
+sys.path.append(os.path.abspath(os.path.join('..','..', 'src')))
 
 from gaminator import *
 
@@ -12,6 +13,7 @@ rfloat = 1
 
 class Akvarium(Svet):
     def nastav(self):
+        global moja_rybka
         okno.nazov="Akvarium level 1"
         okno.vyska=480
         okno.sirka=640
@@ -30,6 +32,7 @@ class Akvarium(Svet):
     def davajJedlo(self):
         Jedlo(self)
         self.nacasujUdalost(100,"Jedloooo")
+        
 class Ryba(Vec):
     def nastav(self):
         self.x = okno.sirka/2
@@ -56,6 +59,7 @@ class Ryba(Vec):
     def nakresli(self,kreslic):
         kreslic.farba = Farba(59,89,100)
         kreslic.elipsa((-20,-10),40,20)
+        
 class Jedlo(Vec):
     def nastav(self):
         self.x = random.randrange(okno.sirka)
@@ -68,9 +72,14 @@ class Jedlo(Vec):
         kreslic.farba = Farba(0,255,0)
         kreslic.elipsa((-10,-10),20,20)
     def krok(self):
+       # if abs(moja_rybka.x - self.x)<10 and abs(moja_rybka.y - self.y)<10:
+       #   print "ZRAZKA"
         self.y += 1
+        print moja_rybka.x, moja_rybka.y
+    
     @priZrazke(Ryba)
     def zahyn(self,rybka):
         self.znic()
         print "kolizia"
+        
 hra.start(Akvarium())
