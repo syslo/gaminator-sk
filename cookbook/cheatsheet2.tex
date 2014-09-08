@@ -1,0 +1,72 @@
+%Tu si môžete zaznačiť, že pracujete na danej veci. V prípade, že ste napísali len časť a ďalej už
+%nechcete, alebo ste hotoví tak sa odtiaľ odpíšte. Bolo by však fajn, aby jedu vec robil jeden
+%človek ak celok a zvyšný len kontrolovali
+%vypracuva: Zaba 
+\input include/include.tex
+
+\begin{document}
+
+\velkynadpis{Ťahák 2}
+
+\nadpis{Triedy a objekty}
+
+Často sa nám pri návrhu hry môže stať, že potrebujeme viacero vecí, ktoré vyzerajú rovnako, správajú
+sa rovnako a líšia sa napríklad len pozíciou. Naviac ale každá z týchto vecí chce existovať
+samostatne mimo ostatných podobných vecí. Na docielenie práve tohoto dizajnu nám pomáha objektovo
+orientovaný návrh.
+
+Ak potrebujeme používať viacero rovnakých vecí, môžeme si navrhnúť šablónu, ktorá bude popisovať ako
+sa dané veci správajú. Túto šablónu nazveme \texttt{trieda}. Trieda má dve dôležité časti:
+\texttt{vlastnosti}, takže premenné, ktoré popisujú danú vec (napríklad pozícia vo svete, HP, ktoré
+pridá) a \texttt{metódy}. Metódy sú funkcie, ktoré daná vec vykonáva nad svojimi vlastnosťami.
+Napríklad môžeme mať metódu na pohyb, ktorá posunie príslušnú vec.
+
+Trieda je však len šablóna, ktorá hovorí ako vieme vytvoriť konkrétnu vec. Z triedy vieme vytvárať
+jednotlivé \texttt{objekty}, čo sú konkrétne veci v programe. Tie majú svoje vlastné hodnoty vo
+vlastnostiach a sú nezávislé od ostatných objektov.
+
+Ďalej si uvedomme, že ak chceme pristupovať k nejakej vlastnosti alebo metóde, tak tieto vlastnosti
+\textbf{nepatria triede}, ale \textbf{patria objektu}. Môžeme teda pristupovať len ku vlastnostiam
+daného objektu. Tento objekt má svoje meno a keď chceme pristúpiť k jeho vlastnosti alebo chceme nad
+ním vykonať metódu, použijeme \texttt{.}(bodka), ktorá spája objekt s jeho vlastnoťou.
+
+Navyše, ak sa chceme v rámci metódy odkazovať na vlastné vlastnosti, použijeme pomocné slovíčko
+\texttt{self}. Takisto nezabudnite, že premenné, ktoré má mať daná trieda ako vlastnosti, musia byť
+uvedené v špeciálnej funkcii, ktorá sa volá konštruktor. V našom prípade bude mať táto funkcia názov
+\texttt{nastav()}.
+
+\nadpis{Trieda v Gaminatore}
+
+Ak chceme vytvoriť triedu v Gaminatore, potrebujeme vedieť niekoľko základných vlastností a metód,
+ktoré takáto trieda musí mať. V prvom rade, musí mať každý objekt svoju pozíciu v našom svete. Preto
+mu musíme nastaviť vlastnosti $x$ a $y$. Bod $(x,y)$ sa dá následne chápať ako stred našeho objektu.
+
+Najdôležitejšie sú však metódy, ktoré musíme implementovať. Myšlienka celého cyklu triedy je
+jednoduchá. Na začiatku objekt \textbf{vznikne} a nastaví si začiatočné vlastnosti. Následne sa bude
+v \textbf{každom kroku} programu vykonávať nejaká zmena tohoto objektu (napr. ryba pláve, jedlo padá
+\dots) a toto pokračuje, až kým nám je objekt zbytočný a chceme ho \textbf{odstrániť}.
+
+Pri vytvorení objektu sa volá funkcia \texttt{nastav(self)}. Do tejto metódy je potrebné napísať, aké
+vlastnosti má daná trieda a aké sú ich začiatočné hodnoty, keď sa bude vytvárať nový objekt. Počas
+behu programu sa potom bude volať metóda \texttt{krok(self)}, do ktorej chceme napísať čo má urobiť daný
+objekt v každom kroku programu. No a na konci treba zavolať metódu \texttt{znic()}, ktorá zničí daný
+objekt. Túto funkciu neprogramujete vy, je už vopred pripravená.
+
+\lstlang{python}\begin{lstlisting}
+class Ryba(Vec):
+    def nastav(self):
+        self.x = 10
+        self.y = 10
+    
+    def krok(self):
+        self.y += 1
+\end{lstlisting}
+
+\nadpis{Kreslenie objektov}
+
+Objekty sa musia nejakým spôsobom vykresľovať. Na to budeme opäť používať \texttt{kreslic}. Ako však
+vieme, každý objekt má nejakú svoju pozíciu $(x,y)$. A táto pozícia sa počas behu programu mení.
+Musíme teda meniť aj to, na akých súradniciach sa má vykresľovať konkrétny objekt? Našťastie nie.
+Jediné čo potrebujeme je naimplementovať triede metódu \texttt{nakresli(self,kreslic)}.
+
+\end{document}
