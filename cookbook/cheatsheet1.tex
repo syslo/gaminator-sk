@@ -25,15 +25,12 @@ Môžeme teda Python použiť ako jednoduchú kalkulačku.
 81
 \end{lstlisting}
 
-Videli sme, že keď mu dáme nejaký matematický výraz (dve hviezdičky predstavujú umocňovanie samozrejme), tak nám ho
+Videli sme, že keď mu dáme nejaký matematický výraz (dve hviezdičky predstavujú umocňovanie), tak nám ho
 vyhodnotí a vypíše výsledok.
-
-Každý program napísaný v C++ má obsahovať jednu hlavnú funkciu \texttt{main()}. Preto najjednoduchší
-program vyzerá nasledovne.
 
 \nadpis{Premenné}
 
-Premenná je krabička (miesto v pamäti), kam si program ukladá dáta. Každá premenná má svoje \texttt{meno} (jednoznačný
+Premenná je krabička (miesto v pamäti), kam si program ukladá dáta. Každá premenná má svoje \texttt{meno} (jednoznačný
 identifikátor), ktorým sa na konkrétnu premennú odkazujeme inde v programe. Keď v programe použijeme meno nejakej premennej
 máme na mysli hodnotu, ktorá je v nej uložená. To nám umožňuje vytvárať výrazy obsahujúce premenné.
 
@@ -74,7 +71,7 @@ Naviac sa nám zíde vedieť zmeniť číslo na string a opačne. Na to slúžia
 \lstlang{python}\begin{lstlisting}
 >>> a=4
 >>> str(a) + "hoj"
-'ahoj'
+'4hoj'
 >>> b="14"
 >>> int(b) + 5
 19
@@ -91,7 +88,7 @@ jednoduché trochu neskôr.
 
 \nadpis{Kreslic}
 
-Vždy keď chceme niečo nakresliť na plochu, musíme o to poprosiť \texttt{kreslic}. To je totiž naše jediná možnosť vykresľovania. Preto treba vedieť
+Vždy keď chceme niečo nakresliť na plochu, musíme o to poprosiť \texttt{kreslic}. To je totiž naša jediná možnosť vykresľovania. Preto treba vedieť
 ako správne poprosiť kreslic, aby niečo spravil.
 
 \begin{itemize}
@@ -118,10 +115,14 @@ Uvedomte si, že smerom nadol \textbf{stúpa} $y$-ová súradnica a doprava \tex
 
 A aby naše obrázky neboli také nudné, bolo by dobré vedieť zmeniť farbu, ktorou kreslíme. Na to musíme povedať \texttt{kreslic}, akú farbu má používať.
 To vieme tak, že zmeníme premennú $kreslic.farba$. Tej buď priradíme nejakú známu farbu ako je $Farba.MODRA$, $Farba.ZLTA$ alebo si namiešame vlastnú farbu
-$Farba(red, green, blue)$, kde $red$, $green$ a $blue$ sú čísla od $0$ po $255$, ktoré udávajú množstvo danej farby vo výsledku.
+$Farba(cervena, zelena, modra)$, kde $cervena$, $zelena$ a $modra$ sú čísla od $0$ po $255$, ktoré udávajú množstvo danej farby vo výsledku.
 
 Zoznam dostupných farieb: $Farba.CIERNA$, $Farba.BIELA$, $Farba.MODRA$, $Farba.ZELENA$, $Farba.CERVENA$ a $Farba.ZLTA$.
 
+\bigskip
+
+Na nasledujúcom príklade si môžete pozrieť, ako by vyzeralo jednoduché vykreslenie štyroch útvarov
+do okna s veľkosťou $600$ krát $400$.
 
 \lstlang{python}\begin{lstlisting}
 kreslic.farba = Farba.CERVENA
@@ -132,5 +133,7 @@ kreslic.farba = Farba.MODRA
 kreslic.ciara((500,300),(okno.sirka,okno.vyska),5)
 kreslic.mnohouholnik([(0,100),(100,100),(50,200)])
 \end{lstlisting}
+
+\includegraphics[scale = 0.5]{priklad1.png}
 
 \end{document}
