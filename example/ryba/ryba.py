@@ -5,8 +5,8 @@ sys.path.append(os.path.abspath(os.path.join('..','..', 'src')))
 from gaminator import *
 import random
 
-okno.sirka = 600
-okno.vyska = 400
+okno.sirka = 1920
+okno.vyska = 1080
 okno.pevne()
 
 
