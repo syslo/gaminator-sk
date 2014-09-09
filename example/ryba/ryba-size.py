@@ -33,6 +33,8 @@ class Zralok(Vec):
         self.velkost = 1.5
 
     def nakresli(self,kreslic):
+        self.miestoHore = int(15*self.velkost)
+        self.miestoDole = int(15*self.velkost)
         self.miestoVpravo = int(35*self.velkost)
         self.miestoVlavo = int(25*self.velkost)
         kreslic.farba = Farba(0,0,0)
@@ -62,67 +64,87 @@ class Ryba(Vec):
         self.sytost = 500
         self.x = okno.sirka/2
         self.y = okno.vyska/2
-        self.miestoHore = 15
-        self.miestoDole = 15
         self.miestoVpravo = 25
         self.miestoVlavo = 35
         self.poslednySmer = 1
         self.velkost = 1.0
+        self.ziva = 1
 
     def nakresli(self,kreslic):
-        if self.poslednySmer == 1:
+        self.miestoHore = int(15*self.velkost)
+        self.miestoDole = int(15*self.velkost)
+
+        if self.ziva ==1:
+            if self.poslednySmer == 1:
+                self.miestoVpravo = int(25*self.velkost)
+                self.miestoVlavo = int(35*self.velkost)
+                kreslic.farba = Farba(256,200,0)
+                kreslic.elipsa((int(-25*self.velkost), int(-15*self.velkost)), int(50*self.velkost), int(30*self.velkost))
+                kreslic.mnohouholnik([(int(-35*self.velkost),int(-18*self.velkost)),(int(-35*self.velkost),int(18*self.velkost)),(int(-15*self.velkost),0)])
+                kreslic.mnohouholnik([(int(-10*self.velkost),int(-25*self.velkost)),(int(-10*self.velkost),0),(int(15*self.velkost),0)])
+                kreslic.farba = Farba(0,0,0)
+                kreslic.elipsa((int(12*self.velkost), int(-6*self.velkost)), int(7*self.velkost), int(7*self.velkost))
+                kreslic.farba = Farba(200,0,0)
+                kreslic.elipsa((int(12*self.velkost), int(5*self.velkost)), int(10*self.velkost), int(6*self.velkost))
+            else:
+                self.miestoVpravo = int(35*self.velkost)
+                self.miestoVlavo = int(25*self.velkost)
+                kreslic.farba = Farba(256,200,0)
+                kreslic.elipsa((int(-25*self.velkost), int(-15*self.velkost)), int(50*self.velkost), int(30*self.velkost))
+                kreslic.mnohouholnik([(int(35*self.velkost),int(-18*self.velkost)),(int(35*self.velkost),int(18*self.velkost)),(int(15*self.velkost),0)])
+                kreslic.mnohouholnik([(int(10*self.velkost),int(-25*self.velkost)),(int(10*self.velkost),0),(int(-15*self.velkost),0)])
+                kreslic.farba = Farba(0,0,0)
+                kreslic.elipsa((int(-19*self.velkost), int(-6*self.velkost)), int(7*self.velkost), int(7*self.velkost))
+                kreslic.farba = Farba(200,0,0)
+                kreslic.elipsa((int(-22*self.velkost), int(5*self.velkost)), int(10*self.velkost), int(6*self.velkost))
+        else:
             self.miestoVpravo = int(25*self.velkost)
             self.miestoVlavo = int(35*self.velkost)
-            kreslic.farba = Farba(256,200,0)
+            kreslic.farba = Farba(50,255,100)
             kreslic.elipsa((int(-25*self.velkost), int(-15*self.velkost)), int(50*self.velkost), int(30*self.velkost))
             kreslic.mnohouholnik([(int(-35*self.velkost),int(-18*self.velkost)),(int(-35*self.velkost),int(18*self.velkost)),(int(-15*self.velkost),0)])
-            kreslic.mnohouholnik([(int(-10*self.velkost),int(-25*self.velkost)),(int(-10*self.velkost),0),(int(15*self.velkost),0)])
+            kreslic.mnohouholnik([(int(-10*self.velkost),int(25*self.velkost)),(int(-10*self.velkost),0),(int(15*self.velkost),0)])
             kreslic.farba = Farba(0,0,0)
-            kreslic.elipsa((int(12*self.velkost), int(-6*self.velkost)), int(7*self.velkost), int(7*self.velkost))
-            kreslic.farba = Farba(200,0,0)
-            kreslic.elipsa((int(12*self.velkost), int(5*self.velkost)), int(10*self.velkost), int(6*self.velkost))
-        else:
-            self.miestoVpravo = int(35*self.velkost)
-            self.miestoVlavo = int(25*self.velkost)
-            kreslic.farba = Farba(256,200,0)
-            kreslic.elipsa((int(-25*self.velkost), int(-15*self.velkost)), int(50*self.velkost), int(30*self.velkost))
-            kreslic.mnohouholnik([(int(35*self.velkost),int(-18*self.velkost)),(int(35*self.velkost),int(18*self.velkost)),(int(15*self.velkost),0)])
-            kreslic.mnohouholnik([(int(10*self.velkost),int(-25*self.velkost)),(int(10*self.velkost),0),(int(-15*self.velkost),0)])
-            kreslic.farba = Farba(0,0,0)
-            kreslic.elipsa((int(-19*self.velkost), int(-6*self.velkost)), int(7*self.velkost), int(7*self.velkost))
-            kreslic.farba = Farba(200,0,0)
-            kreslic.elipsa((int(-22*self.velkost), int(5*self.velkost)), int(10*self.velkost), int(6*self.velkost))
+            #kreslic.elipsa((int(12*self.velkost), int(-1*self.velkost)), int(7*self.velkost), int(7*self.velkost))
+            kreslic.ciara((int(12*self.velkost), int(-1*self.velkost)), (int(19*self.velkost), int(6*self.velkost)),3)
+            kreslic.ciara((int(19*self.velkost), int(-1*self.velkost)), (int(12*self.velkost), int(6*self.velkost)),3)
+            kreslic.farba = Farba(128,128,128)
+            kreslic.elipsa((int(12*self.velkost), int(-10*self.velkost)), int(10*self.velkost), int(6*self.velkost))
 
     def krok(self):
-        self.sytost -=1
-        self.velkost = (float(self.sytost)/float(500))**(0.3)
-        if(self.svet.stlacene[pygame.K_UP]):
-            if self.y - self.miestoHore >= 0:
-                self.y -= 4
-        if(self.svet.stlacene[pygame.K_DOWN]):
-            if self.y + self.miestoDole <= okno.vyska:
-                self.y += 4
-        if(self.svet.stlacene[pygame.K_LEFT]):
-            if self.x - self.miestoVlavo >= 0:
-                self.x -= 4
-            self.poslednySmer = -1
-        if(self.svet.stlacene[pygame.K_RIGHT]):
-            if self.x + self.miestoVpravo <= okno.sirka:
-                self.x += 4
-            self.poslednySmer = 1
+        if self.ziva==1:
+            self.sytost -=1
+            self.velkost = (float(self.sytost)/float(500))**(0.3)
+            if(self.svet.stlacene[pygame.K_UP]):
+                if self.y - self.miestoHore >= 0:
+                    self.y -= 4
+            if(self.svet.stlacene[pygame.K_DOWN]):
+                if self.y + self.miestoDole <= okno.vyska:
+                    self.y += 4
+            if(self.svet.stlacene[pygame.K_LEFT]):
+                if self.x - self.miestoVlavo >= 0:
+                    self.x -= 4
+                self.poslednySmer = -1
+            if(self.svet.stlacene[pygame.K_RIGHT]):
+                if self.x + self.miestoVpravo <= okno.sirka:
+                    self.x += 4
+                self.poslednySmer = 1
 
-        self.svet.rybka.x = self.x
-        self.svet.rybka.y = self.y
+            self.svet.rybka.x = self.x
+            self.svet.rybka.y = self.y
 
-        if self.sytost <= 0:
-            self.znic()
+            if self.sytost <= 0:
+                self.znic()
 
     @priZrazke(Zralok)
     def somMoznoZozrana(self,zralok):
-        print self.velkost
-        print zralok.velkost
+        if self.ziva == 1:
+            print self.velkost
+            print zralok.velkost
+
         if self.velkost <= zralok.velkost:
-            self.znic()
+            #self.znic()
+            self.ziva = 0
         else:
             zralok.znic()
 
@@ -143,8 +165,9 @@ class Jedlo(Obrazok):
 
     @priZrazke(Ryba)
     def zjedene(self,rybka):
-        rybka.sytost +=100
-        self.znic()
+        if rybka.ziva == 1:
+            rybka.sytost +=100
+            self.znic()
 
 
 class Akvarium(Svet):
