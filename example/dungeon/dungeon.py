@@ -12,6 +12,26 @@ DX = [-1,0,1,0]
 DY = [0,-1,0,1]
 KEY_POHYB = [pygame.K_a, pygame.K_w, pygame.K_d, pygame.K_s]
 
+#bez inventara, zrazky iba s dverami/stenami, prisery ziju
+#itemy nemaju pouzi
+
+#zrazky s priserami 				- aby uberali hp a a odskakovali
+#bomba, zmraz, (pridaj zivot) 		- udalost pri zrazke s itemom
+#pasce, odmraz 						- nacasujUdalost 
+#klavesDole
+#------------------------------------
+#inventar(append,remove,for,break)	- presun predmet do inventara/ do pola
+#pouzivanie inventara+pouzi() 		- vlastna klasa
+#------------------------------------
+#Pauza/GameOver	(Uvodny)			- novySvet, vymenSvet + Texty
+#------------------------------------
+#Scrolly							- citanie zo suboru
+#------------------------------------
+#Prechod do noveho levelu			- subory, novyhrac
+
+#zranennie volaj priamo, camelcase stare, bomba
+#zmaz sys.path
+
 #self potrebuje mat x,y,rychlost,svet
 def daSaIst(self, smer4):
 	DDX = [-1,-1,0,1,1,1,0,-1]
@@ -41,26 +61,21 @@ class Dvere(Obrazok):
 		self.typ = ord(znak) - ord('A')
 		self.nastavSubor("grafika","drevozamok"+str(self.typ) +".png")
 
-class Pasca(Obrazok):								#ma ovladat iba seba?
+class Pasca(Obrazok):
 	def nastav(self, x, y, znak):
 		self.x = x
 		self.y = y
 		self.vysunuta = False
-		self.svet.nastalaUdalost("VYSUN",self)
 
 	@priUdalosti("VYSUN")
-	def vysun(self,pasca):
-		if self != pasca: return
+	def vysun(self):
 		self.nastavSubor("grafika","ohen.png")
 		self.vysunuta = True
-		self.svet.nacasujUdalost(1300, "ZASUN",self)
 
 	@priUdalosti("ZASUN")
-	def zasun(self,pasca):
-		if self != pasca: return
+	def zasun(self):
 		self.nastavSubor("grafika","ohenzamrezami.png")
 		self.vysunuta = False
-		self.svet.nacasujUdalost(1300, "VYSUN",self)
 
 # Specialne template objekty
 class Lifebar(Vec):
@@ -82,22 +97,19 @@ class Prisera(Obrazok):
 	def nastav(self, x, y, znak):
 		self.x = x
 		self.y = y
-		self.nazov = str(self.__class__)[17:-2]
+		self.nazov = self.__class__.__name__
 		
 		self.stoj = False
 		self.rychlost = 0
 		self.smer = 0
+		self.starax = self.x
+		self.staray = self.y
 
 		self.lifebar = Lifebar(self.svet, self)
 		self.zivoty = 0
 		self.maxZivoty = 0
 		self.utok = 0
 		self.odmeny = [] #zoznam charakterovych skratiek pre itemy
-
-	def odstupPoZrazke(self):
-		if daSaIst(self,(self.smer+2)%4 ):
-			self.x -= self.rychlost*DX[self.smer]
-			self.y -= self.rychlost*DY[self.smer]
 
 	def zomri(self):
 		for odmena in self.odmeny:
@@ -124,13 +136,14 @@ class Prisera(Obrazok):
 
 	@priZrazke(Dvere)
 	def dvereVCeste(self,dvere):
-		self.odstupPoZrazke()
+		self.x = self.starax
+		self.y = self.staray
 
 class Item(Obrazok):
 	def nastav(self, x, y, znak):
 		self.x = x
 		self.y = y
-		self.nazov = str(self.__class__)[17:-2]
+		self.nazov = self.__class__.__name__
 		
 	def pouzi(self):
 		pass
@@ -204,6 +217,9 @@ class Hrac(Obrazok):
 		self.y = y
 		self.nastavSubor("grafika", "hrac.png")
 
+		self.starax = x
+		self.staray = y
+
 		self.inventar = None
 		
 		self.zivoty = 300
@@ -212,6 +228,8 @@ class Hrac(Obrazok):
 		self.rychlost = 2
 
 	def krok(self):
+		self.starax = self.x
+		self.staray = self.y
 		#pohyb, ktory overuje zrazky so stenami
 		for i in range(4):
 			if self.svet.stlacene[KEY_POHYB[i]] and daSaIst(self, i):
@@ -230,12 +248,6 @@ class Hrac(Obrazok):
 	def vyliec(self, mnozstvo):
 		self.zivoty = min( self.zivoty + mnozstvo, self.maxZivoty )
 
-	def odstupPoZrazke(self):
-		for i in range(4):
-			if self.svet.stlacene[KEY_POHYB[i]] and daSaIst(self,(i+2)%4 ):
-				self.x -= self.rychlost*DX[i]
-				self.y -= self.rychlost*DY[i]
-
 	@priZrazke(Dvere)
 	def pokusOOtvorenie(self, dvere):
 		for i in range( len(self.inventar.predmety) ):
@@ -243,8 +255,9 @@ class Hrac(Obrazok):
 				self.inventar.pouziPredmet(i)
 				dvere.znic()
 				break
-		self.odstupPoZrazke()
-	
+		self.x = self.starax
+		self.y = self.staray
+		
 	@priZrazke(Pasca)
 	def padDoPasce(self, pasca):
 		if pasca.vysunuta:
@@ -254,14 +267,14 @@ class Hrac(Obrazok):
 	def bojSPriserou(self, prisera):
 		self.svet.nastalaUdalost("ZRANENIE",self.utok,prisera)
 		self.zranenenie(prisera.utok)
-		self.odstupPoZrazke()
-		self.odstupPoZrazke()
-
+		self.x = self.starax
+		self.y = self.staray
 
 	@priZrazke(Item)
 	def zoberItem(self, predmet):
 		if predmet.nazov == "Zvitok":
-			self.odstupPoZrazke()
+			self.x = self.starax
+			self.y = self.staray
 		else:
 			self.inventar.pridajPredmet(predmet)
 
@@ -310,7 +323,7 @@ class Duch(Prisera):
 		self.rychlost = 1
 		self.zivoty = self.maxZivoty = 32
 		self.utok = 3
-		odmena = 'ZL  '
+		odmena = 'ZL__'
 		self.odmeny = [odmena[nahodneCislo(0,3)]]
 
 
@@ -332,19 +345,19 @@ class Duch(Prisera):
 
 # Svety
 LEGENDA = {
-		'H': Hrac,
-		#staticke
-		'#': Stena,
-		'P': Pasca,
-		'A': Dvere, 'B': Dvere, 'C': Dvere, 'D': Dvere, #typy dveri 0-3
-		#itemy
-		'L': NapojZivoty,
-		'Z': Zmrazovac,
-		'0': Kluc,  '1': Kluc,  '2': Kluc,  '3': Kluc,	#typy kluca 0-3
-		'a': Zvitok,
-		#prisery
-		'@': Duch
-	}
+	'H': Hrac,
+	#staticke
+	'#': Stena,
+	'P': Pasca,
+	'A': Dvere, 'B': Dvere, 'C': Dvere, 'D': Dvere, #typy dveri 0-3
+	#itemy
+	'L': NapojZivoty,
+	'Z': Zmrazovac,
+	'0': Kluc,  '1': Kluc,  '2': Kluc,  '3': Kluc,	#typy kluca 0-3
+	'a': Zvitok,
+	#prisery
+	'@': Duch
+}
 
 class Miestnost(Svet):
 	def nastav(self):
@@ -361,18 +374,27 @@ class Miestnost(Svet):
 			for j in range(self.sirka):
 				if mapa[i][j] == 'H':
 					self.hrac = Hrac(self, j*GRID+GRID/2, i*GRID+GRID/2,mapa[i][j]) 
-				elif mapa[i][j] in LEGENDA : 
+				elif mapa[i][j] in LEGENDA: 
 					LEGENDA[mapa[i][j]](self, j*GRID+GRID/2, i*GRID+GRID/2, mapa[i][j])
 					if mapa[i][j] == '#': self.mapa[i][j] = 1
 		okno.sirka = self.sirka*GRID
 		okno.vyska = self.vyska*GRID + VYSKA_SPODNEHO_BARU
 		self.hrac.inventar = Inventar(self,10)
 		StatusBar(self)
+		self.nastalaUdalost("VYSUN")
 	
 	@priUdalosti("KLAVES DOLE")
 	def klaves(self, klaves, unicode):
 		if klaves == pygame.K_p:
 			hra.otvorSvet(Pauza())
+
+	@priUdalosti("VYSUN")
+	def vysun(self):
+		self.svet.nacasujUdalost(1300, "ZASUN")
+
+	@priUdalosti("ZASUN")
+	def zasun(self):
+		self.svet.nacasujUdalost(1300, "VYSUN")
 
 class Pauza(Svet):
 	def nastav(self):
