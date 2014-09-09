@@ -2,9 +2,10 @@ import os
 from gaminator import *
 import dungeon
 
+#akurat miesto pre statusbar a inventar
 VYSKA_SPODNEHO_BARU = 16 + dungeon.GRID
 
-# Nad priserami
+# ukazovac zivotov nad priserami
 class Lifebar(Vec):
 	def nastav(self, prisera):
 		self.prisera = prisera
@@ -20,7 +21,7 @@ class Lifebar(Vec):
 		else:	            kreslic.farba = Farba.CERVENA
 		kreslic.obdlznik( (-dungeon.GRID/2,-dungeon.GRID/2-5), dungeon.GRID*z/m, 3)
 
-# GUI
+# ukazovac zivotov hraca na spodku obrazovky
 class StatusBar(Vec):
 	def nastav(self):
 		self.x = 0
@@ -40,11 +41,11 @@ class StatusBar(Vec):
 		kreslic.obdlznik( (0,0), okno.sirka*z/m, 16)
 		self.zivoty.aktualizuj( str(z)+"/"+str(m) )
 
-#self potrebuje mat x,y,rychlost,svet
-def daSaIst(self, smer4):
+# zistovanie zrazok so stenami daSaIst(objekt, smer) -> True/False
+def daSaIst(self, smer):
 	DDX = [-1,-1,0,1,1,1,0,-1]
 	DDY = [0,-1,-1,-1,0,1,1,1]
-	smer8 = 2*smer4
+	smer8 = 2*smer
 	#pre kazdy pohyb overime 3 body posunute v smere tohto pohybu
 	for okolie in [-1,0,1]:
 		ss = (smer8+okolie+8)%8
@@ -55,6 +56,7 @@ def daSaIst(self, smer4):
 		if (self.svet.mapa[nny][nnx]!=0) or (nnx != nx) or (nny != ny): return False
 	return True
 
+# funkcia, ktora vytvori novu Miestnost na zaklade mapy v subore
 def vytvorMiestnostZoSuboru(*paths):
 	self = dungeon.Miestnost()
 	mapa = open(os.path.join(*paths),'r').read().strip().split('\n')
@@ -73,4 +75,5 @@ def vytvorMiestnostZoSuboru(*paths):
 	StatusBar(self)
 	return self
 
+# spustenie samotnej hry
 hra.start( vytvorMiestnostZoSuboru("miestnosti", "0.room") )
