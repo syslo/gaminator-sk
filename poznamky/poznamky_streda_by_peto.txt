@@ -1,0 +1,24 @@
+mame dungeon, priserka koliduje iba zo stenami
+prisery beru zivot
+potiony
+	berie sa hned pri zrazke
+		podla toho aky je tak sa splni
+		pre kazdu zrazku zvlast
+			pri bombe pre vsetkych udalost
+pasce 
+	hore/dole - svet reaguje na udalosti ->svet ich casuje - dame im exp rast?
+	aj pasce reaguju na udalosti
+	casovanie - vytrcia sa a zastrcia
+pridame inventar
+	pole - append, remove
+	iterovanie for cyklom
+		break
+	lista dole
+	pole
+	nastavia im suradnice
+	stlac enter pre novu hru, pauza(vypiovanie textu), game over - novy svet
+	kazdy item ma pouzi - najprv ifmi, potom pouzi
+
+daleko daleko
+dalsi svet
+	skopirovat udaje zo stareho sveta do noveho
