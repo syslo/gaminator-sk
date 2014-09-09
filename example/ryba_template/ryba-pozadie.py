@@ -15,7 +15,7 @@ class Info_panel(Vec):
         self.sytost_text.y = 0
         self.sytost_text.zarovnajX = 0
         self.sytost_text.zarovnajY = 0
-        self.sytost_text.aktualizuj(velkost=30,farba = Farba(255,255,255))
+        self.sytost_text.aktualizuj(velkost=30,farba = Farba(0,0,0))
 
     def krok(self):
         self.sytost_text.aktualizuj(text = "Sytost: " + str(self.svet.rybka.sytost))
