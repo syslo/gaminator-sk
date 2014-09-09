@@ -1,0 +1,108 @@
+mame pripravene pozadie
+zacneme tym co chceme robit
+  rybicka sa bude hybat sipkami a papat jedlo
+  v rohu bude napis ako je najedena
+  bude tam zralok, ktory pojde hore a dole
+  rozoberieme si chovanie a ako sa taka hra navrhuje
+ulohy - rozdelit na logicke casti
+  rybicky
+    rybicka
+    zralok
+  voda
+    ta uz je na pozadi
+  cisla
+    komplikovane a specialne
+  akvarium
+    je to vlastne svet
+    ma pozadie - vid riadok 1
+  veci v akvariu
+    su v svete - vid vyzsie (ryba, zralok, jedlo)
+
+niektore su unikatne, niektorych je viac, ale kazda je UNIKATNA
+co potrebujeme vediet o rybe?
+  suradnice - x,y
+  nasytenost
+co potrebujeme vediet o zralokovi
+  x,y
+jedlo
+  x,y,vyzivnost
+
+
+CHOVANIE = metody
+
+jedlo
+  pada
+  zmizni - o toto sa nemusime starat, spravil to sysel
+zralok
+  zmizni
+  chodi
+  zerie
+  plava dopredu
+  zerie rybu
+ryba
+  zmizni
+  plava
+  zerie jedlo
+  hladne
+
+
+TERAZ OOP:
+zopakovat OOP calss/objekt
+ma to strukturu
+tomu sa hovory objektovo orientovany navrh
+zacneme kruhom
+  vysvetlit bodku
+  zvacsovanie kruhu a self
+  zvacsi2(self,kreslic)    --self a kreslic dostaneme
+ 
+sloty - povedat
+  nastav
+    objavi sa
+  krok
+    jedlo pada - zvysuje sa y
+  zrazka
+  nakresli - take specialne
+    premenna kreslic
+    POZOR NA LOKALNE SURADNICE:
+
+
+AKVARIUM
+  nakresli
+    uz mame
+  nastav
+    spravi rybu
+    vytvori jedlo
+    vytvori zraloka
+dalsie poznamky: pouzivat slovo VEC
+
+
+vrstvy:vlastnosti, chovanie, logika(co kedy)
+
+
+BODKOVANIE:
+
+mam J akoze jedlo
+ako zistit jeho x?
+  J.x
+  J.x = J.x +5
+
+
+
+ZHRNUTIE:
+  specifikacia hry
+  ake su objekty - ryba, zralok...
+  ake maju vlastnosti/chovanie
+  model obj: class/instancia - fylozoficky atribut
+    metoda/vlastnosti
+  kruh
+    vlastnosti - vymenuj
+    metody - vymenuj
+      pouzitie
+        vonku
+        vnutri
+    konstruktor - nastav ---definicia premennych 
+vratime sa k rybe
+  specialne (krok, znic, nastav, nakresli!(global/lokal))
+  implementujte
+  @priZrazke -> znacka
+  miesto hore, miesto dole...
