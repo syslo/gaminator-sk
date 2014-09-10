@@ -45,12 +45,12 @@ class Vec(object):
 
     def prekryva(self, vec):
         prienik_x = (
-            max(self.x - self.miestoVlavo, vec.x - vec.miestoVlavo),
-            min(self.x + self.miestoVpravo, vec.x + vec.miestoVpravo),
+            int(max(self.x - self.miestoVlavo, vec.x - vec.miestoVlavo)),
+            int(min(self.x + self.miestoVpravo, vec.x + vec.miestoVpravo)),
         )
         prienik_y = (
-            max(self.y - self.miestoHore, vec.y - vec.miestoHore),
-            min(self.y + self.miestoDole, vec.y + vec.miestoDole),
+            int(max(self.y - self.miestoHore, vec.y - vec.miestoHore)),
+            int(min(self.y + self.miestoDole, vec.y + vec.miestoDole)),
         )
         if prienik_x[0] >= prienik_x[1] or prienik_y[0] >= prienik_y[1]:
             return False
@@ -91,13 +91,13 @@ def _prekry_masky(vec1, vec2, prienik_x, prienik_y):
     if vec1._mask == None:
         vec1, vec2 = vec2, vec1
     if vec2._mask == None:
-        prienik = pygame.mask.Mask((prienik_x[1] - prienik_x[0],
-                                    prienik_y[1] - prienik_y[0]))
+        prienik = pygame.mask.Mask(((prienik_x[1] - prienik_x[0]),
+                                    (prienik_y[1] - prienik_y[0])))
         prienik.fill()
         return prienik.overlap(vec1._mask,
-                               (vec1.x - vec1.miestoVlavo - prienik_x[0],
-                                vec1.y - vec1.miestoHore - prienik_y[0]));
+                               (int(vec1.x - vec1.miestoVlavo - prienik_x[0]),
+                                int(vec1.y - vec1.miestoHore - prienik_y[0])));
 
     return vec2._mask.overlap(vec1._mask,
-        (vec1.x - vec1.miestoVlavo - vec2.x + vec2.miestoVlavo,
-         vec1.y - vec1.miestoHore - vec2.y + vec2.miestoHore))
+        (int(vec1.x - vec1.miestoVlavo - vec2.x + vec2.miestoVlavo),
+         int(vec1.y - vec1.miestoHore - vec2.y + vec2.miestoHore)))
