@@ -8,8 +8,8 @@ class Kreslic:
 
     def __init__(self, x=0, y=0, farba=0):
         self.farba = farba
-        self.x = x
-        self.y = y
+        self.x = int(x)
+        self.y = int(y)
         self._surface = pygame.display.get_surface()
 
     def obdlznik(self, (x, y), sirka, vyska, okraj=0):
