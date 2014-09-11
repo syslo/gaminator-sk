@@ -12,7 +12,7 @@
 
 Často sa nám pri návrhu hry môže stať, že potrebujeme viacero vecí, ktoré vyzerajú rovnako, správajú
 sa rovnako a líšia sa napríklad len pozíciou. Naviac ale každá z týchto vecí chce existovať
-samostatne mimo ostatných podobných vecí. Na docielenie práve tohoto dizajnu nám pomáha objektovo
+samostatne, mimo ostatných podobných vecí. Na docielenie práve tohoto dizajnu nám pomáha objektovo
 orientovaný návrh.
 
 Ak potrebujeme používať viacero rovnakých vecí, môžeme si navrhnúť šablónu, ktorá bude popisovať ako
@@ -30,10 +30,14 @@ vlastnostiach a sú nezávislé od ostatných objektov.
 daného objektu. Tento objekt má svoje meno a keď chceme pristúpiť k jeho vlastnosti alebo chceme nad
 ním vykonať metódu, použijeme \texttt{.}(bodka), ktorá spája objekt s jeho vlastnoťou.
 
-Navyše, ak sa chceme v rámci metódy odkazovať na vlastné vlastnosti, použijeme pomocné slovíčko
+Navyše, ak sa chceme v rámci metódy odkazovať na vlastnosti daného objektu, použijeme pomocné slovíčko
 \texttt{self}. Takisto nezabudnite, že premenné, ktoré má mať daná trieda ako vlastnosti, musia byť
 uvedené v špeciálnej funkcii, ktorá sa volá konštruktor. V našom prípade bude mať táto funkcia názov
 \texttt{nastav()}.
+
+Dôležité je ešte si povedať, že ak chceme vytvoriť nový objekt pre triedu s názvom \texttt{Trieda},
+vytvoríme ho tak, že zavoláme funkciu \texttt{Trieda()}. Táto funkcia nemusí byť implementovaná, je
+to špeciálne značenie, ktoré na pozadí zavolá funkciu \texttt{nastav()}.
 
 \nadpis{Trieda v Gaminatore}
 
@@ -68,5 +72,102 @@ Objekty sa musia nejakým spôsobom vykresľovať. Na to budeme opäť používa
 vieme, každý objekt má nejakú svoju pozíciu $(x,y)$. A táto pozícia sa počas behu programu mení.
 Musíme teda meniť aj to, na akých súradniciach sa má vykresľovať konkrétny objekt? Našťastie nie.
 Jediné čo potrebujeme je naimplementovať triede metódu \texttt{nakresli(self,kreslic)}.
+
+V rámci tejto metódy môžeme používať kreslic presne rovnakým spôsobom ako pred tým, jediné čo sa
+zmení je pozícia, kam sa budú dané obrázky kresliť. Kreslic v objekte, ktorý má pozíciu $(x,y)$
+pokladá túto pozíciu za pozíciu $(0,0)$. Zavolanie funkcie \texttt{kreslic.ciara((0,0),(5,5),2)}
+nenakreslí šikmú čiaru z rohu obrazovky, ale od pozície $(x,y)$. Môžete si to tiež predstaviť, že
+vždy keď chce kreslic niečo nakresliť, priráta si k daným súradniciam ešte súradnice $(x,y)$ a až
+potom to vykreslí na plochu.
+
+\nadpis{Príkaz \texttt{if}}
+
+Niekedy sa potrebujeme rozhodovať o veciach v závislosti na platnosti určitých podmienok. Napríklad,
+ak nám jedlo vypadne z obrazovky, teda jeho $y$-ová súradnica je väčšia ako výška okna, chceli by
+sme ju znova nastaviť na $0$.
+
+Na to nám bude slúžiť príkaz \texttt{if}.
+
+\lstlang{python}\begin{lstlisting}
+if podmienka :
+    prikaz1
+    prikaz2
+\end{lstlisting}
+
+Syntax tohoto príkazu je jednoduchá. \texttt{Ak platí podmienka, tak sa vykoná postupne prikaz1 a
+prikaz2}.
+
+Niekedy však chceme zareagovať aj na to, čo sa má stať ak nastane iná podmienka, poprípade chceme
+ošetriť všetky zvyšné možnosti. Na to sa použije \texttt{elif} a \texttt{else}. Nasledujúci program
+rozhodne o čísle $cislo$, či je kladné, záporné alebo nula.
+
+\lstlang{python}\begin{lstlisting}
+if cislo > 0:
+    print "kladne"
+elif cislo < 0:
+    print "zaporne"
+else:
+    print "nula"
+\end{lstlisting}
+
+Všimnite si, že za \texttt{else} nenasleduje podmienka, všetko čo nesedelo na predošlé podmienky je
+v tejto časti splnené. Takisto vykonávanie takéhoto zloženého \texttt{if}u je také, že postupne (od
+hora nadol) sa kontrolujú podmienky a vykonajú sa príkazy na \textbf{prvej} splnenej podmienke.
+
+Ak by sme chceli vyjadriť komplikovanejšie podmienky, napr. číslo má byť kladné a párne, môžeme
+tieto dve podmienky spojiť pomocou slovíčka \texttt{and} (a).
+
+\texttt{if cislo>0 and cislo\%2==0:}
+
+Táto podmienka je pravdivá iba ak sú pravdivé \textbf{obe} jej časti. Spojka \texttt{or} (alebo) je
+pravdivá ak je pravdivá \textbf{aspoň} jedna jej časť.
+
+\nadpis{Reagovanie na klávesnicu}
+
+Dôležitá časť každej hry je komunikácia s hráčom, teda reagovanie na stlečenie kláves. Na tento účel
+si \texttt{svet} pamätá pole \texttt{stlacene[]}. V tomto poli je pre každý kláves uložená hodnota
+\texttt{True} alebo \texttt{False}, podľa toho, či je daný kláves stlačený.
+
+No konkrétnu klávesu sa opýtame tak, že do hranatých zátvoriek vložíme jej pomenovanie v špeciálnom
+formáte \texttt{pygame.K\_nazovKlavesy}. Za $nazovKlavesy$ môže ísť jednoduchý znak ako \texttt{'a'}
+alebo komplikovanejší zápis ako \texttt{DOWN} (pre šipku dole), \texttt{SPACE} pre medzerník \dots V
+prípade, že potrebujete iné špeciálne znaky, najlepšie bude googliť.
+
+\lstlang{python}\begin{lstlisting}
+if svet.stlacene[pygame.K_ESCAPE]:
+    hra.koniec()
+if svet.stlacene[pygame.K_w]:
+    chodHore()
+\end{lstlisting}
+
+\nadpis{Zrážanie}
+
+Bolo by veľmi vhodné, ak by sme vedeli detekovať zrážky a vyhodnocovať udalosti podľa nich.
+Napríklad ak sa ryba zrazí s jedlom, chce ho zožrať. Na naše šťastie, o toto všetko sa stará
+Gaminator takmer automaticky.
+
+Majme triedu \texttt{Ryba} a triedu \texttt{Jedlo}. Ak chceme, aby sa ryba najedla, keď sa zrazí s
+jedlom, musíme napísať takýto program.
+
+\lstlang{python}\begin{lstlisting}
+class Ryba(Vec):
+    @priZrazke(Jedlo)
+    def najemSa(self,jedlo):
+        self.sytost += jedlo.vyzivnost
+\end{lstlisting}
+
+Riadok \texttt{@priZrazke(Jedlo)} hovorí, že nasledujúca funkcia ($najemSa()$) sa má zavolať ak sa
+ja (Ryba) zrazím s nejakým objektom z triedy Jedlo. No a funkcia $najemSa()$, ktorá sa volá po tomto
+zrazení, musí mať dva parametre -- $self$, čo je premenná na tú konkrétnu rybu (pretože som v triede
+Ryba) a premennú $jedlo$, ktorá ukazuje na konkrétne jedlo, s ktorým sa tá ryba zrazila.
+
+Posledná vec je, že ak chcem riešiť zrážky, potrebujem každému objektu určiť, akou časťou sa má
+zrážať. V našom prípade mu môžeme nastaviť len kolízny obdĺžnik a to pomocou štyroch premenných v
+$nastav()$ -- $self.miestoHore$, $self.miestoDole$, $self.miestoVlavo$ a $self.miestoVpravo$. Tie
+hovoria, ako ďaleko od bodu $(x,y)$ daného objektu sa tento objekt ešte zráža. To vytvára obdĺžnik
+okolo bodu $(x,y)$.
+
+O zrážanie týchto obdĺžnikov a volanie funkcií pri \texttt{@priZrazke(Trieda)} sa ďalej stará
+Gaminator.
 
 \end{document}
