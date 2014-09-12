@@ -1,5 +1,5 @@
 import sys, os, math
-sys.path.append(os.path.abspath(os.path.join('..','..', '..', 'src')))
+sys.path.append(os.path.abspath(os.path.join('..', '..', 'src')))
 
 from gaminator import *
 from random import randint
@@ -13,7 +13,7 @@ Farba.VZDUCH = Farba(240, 240, 255)
 def interpoluj(v1, v2, pomer_v1):
     return v1*pomer_v1 + v2*(1.0-pomer_v1)
 
-class MorskyPohyb: # musi to byt vec
+class MorskyPohyb(Vec): 
     # gravitacna konstanta
     g = 9.8
     # hustota:
