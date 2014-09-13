@@ -3,8 +3,8 @@ import os
 sys.path.append(os.path.abspath(os.path.join('..','..', 'src')))
 
 from gaminator import *
-import random
-import time
+from random import randrange
+from time import localtime, time
 
 #ZRAZKY - Had(sam so sebou), Stena(s hadom), Jedlo(so stenou a hadom)
 
@@ -138,8 +138,8 @@ class Jedlo(Obrazok):
 	"""Upravy staty a posle svetu spravu, nech sa vygeneruje dalsie.
 	   NORMAL, SPEED, LIFE, IMMORTALITY, FAT"""
 	def nove_miesto(self):
-		self.x = random.randrange(SIRKA)
-		self.y = random.randrange(VYSKA)
+		self.x = randrange(SIRKA)
+		self.y = randrange(VYSKA)
 
 	def nastav(self,typ):
 		self.typ = typ
@@ -152,7 +152,7 @@ class Jedlo(Obrazok):
 		if typ == "NONE":
 			pass
 		else:
-			self.nastavSubor(os.path.join("obr", self.typ + "c.png") )
+			self.nastavSubor(os.path.join("obr", self.typ + ".png") )
 
 		self.nove_miesto()
 		self.miestoVlavo=self.miestoVpravo=self.miestoDole=self.miestoHore = 10
@@ -227,11 +227,11 @@ class Player_data():
 			self.dlzka, self.smer, self.level, self.skore, self.zivoty = parametre
 
 class Level_data():
-	def __init__(self,nazov_suboru):
+	def __init__(self,*paths):
 		self.max_score = 0
 		self.bonusy = []
 		self.steny = []		#stvorice
-		with open(nazov_suboru,"r") as file: 
+		with open(os.path.join(*paths),"r") as file: 
 			i = 0
 			parametre = []
 			for line in file:
@@ -266,7 +266,7 @@ class Level(Svet):
 		self.nacasujUdalost(1000, "PAUZA") 
 		
 		#LEVEL
-		level = Level_data("level"+str(self.level)+".data")
+		level = Level_data("levely", "level"+str(self.level)+".data")
 		self.max_score = level.max_score
 		for x1,y1,x2,y2 in level.steny:
 			st = Stena(self, x1, y1, x2, y2)
@@ -276,7 +276,7 @@ class Level(Svet):
 
 		#UI
 		panel = Horny_panel(self)
-		pozadie = Pozadie(self, os.path.join("obr","level"+str(self.level)+".png"))
+		pozadie = Pozadie(self, os.path.join("levely","level"+str(self.level)+".png"))
 			
 	def uloz_hraca(self, save):
 		with open(save,"w") as f: 
@@ -320,7 +320,7 @@ class Level(Svet):
 		self.skore += 1
 		self.hadik.pridaj_telo()
 		self.jedlo = Jedlo(self, "NORMAL")
-		if random.randrange(2) == 0:
+		if randrange(2) == 0:
 			self.bonus = Jedlo(self, TYPY_JEDLA[self.bonusy[self.terajsi_bonus]])
 			self.terajsi_bonus = (self.terajsi_bonus+1) % len(self.bonusy)
 
@@ -426,7 +426,7 @@ class UvodneMenu(Svet):
 		
 	@priUdalosti("NEW GAME")
 	def nova_hra(self):
-		hra.otvorSvet(Level("save0.data"))
+		hra.otvorSvet(Level(os.path.join("levely", "save0.data")))
 
 	@priUdalosti("HIGH SCORE")
 	def skore(self):
@@ -475,7 +475,7 @@ class HighScore(Svet):
 		if nove > int( self.zaznamy[-1][0] ):
 			self.pole = TextovePole(self,SIRKA/2,35,SIRKA -20, 50,"sem napis meno")
 			Textholder(self,60,35,0,0,"Body: "+str(nove))
-			t = [ str(x) for x in time.localtime( time.time() ) ]
+			t = [ str(x) for x in localtime( time() ) ]
 			self.cas_string = ":".join(t[3:5])+" "+".".join( (reversed(t[0:3])) )
 			Textholder(self,SIRKA-100,35,0,0, self.cas_string) 
 			self.nastalaUdalost("kurzor")
